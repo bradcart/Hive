@@ -1,0 +1,318 @@
+@import "./helpers/variables";
+@import "./components/button";
+@import "./components/logo";
+@import "./layouts/navbar";
+@import "./layouts/hero";
+@import "./layouts/chatroom";
+
+/* self-hosted fonts */
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-SemiBold.woff2") format("woff2"),
+    url("/fonts/Gilroy-SemiBold.woff") format("woff");
+  font-weight: 500;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #fafafa;
+  color: black;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* custom */
+h1 {
+  font-family: forma-djr-banner, sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 244px;
+  line-height: 210px;
+  margin: 0;
+}
+
+h2 {
+  font-family: forma-djr-text, sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 34px;
+  // letter-spacing: -0.2px;
+  line-height: 98%;
+}
+
+h3 {
+  font-family: forma-djr-micro;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 14px;
+}
+
+p {
+  font-family: forma-djr-text, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* components */
+// .button-primary {
+//   cursor: pointer;
+//   border: none;
+//   border-radius: 999px;
+//   background-color: black;
+//   color: #fafafa;
+//   padding: 20px 70px;
+//   font-family: forma-djr-text, sans-serif;
+//   font-size: 18px;
+//   font-weight: 500;
+//   // letter-spacing: -0.75px;
+//   &:hover {
+//     opacity: 0.8;
+//   }
+//   &:active {
+//     opacity: 1;
+//   }
+// }
+
+// .button-secondary {
+//   cursor: pointer;
+//   border-radius: 999px;
+//   padding: 8px 30px;
+//   font-family: forma-djr-micro, sans-serif;
+//   font-size: 14px;
+//   font-weight: 700;
+//   background-color: black;
+//   border: 2px solid #fafaface;
+//   color: #fafafa;
+//   &:hover {
+//     background-color: #fafafaee;
+//     color: black;
+//   }
+// }
+
+/* landing */
+// .landing {
+//   height: 100vh;
+//   display: grid;
+//   grid-template-columns: 10fr 7fr;
+//   overflow: hidden;
+// }
+
+// .landing__content {
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+//   margin-top: 5%;
+// }
+
+// .landing__image {
+//   display: block;
+//   position: relative;
+// }
+
+// .logo {
+//   display: flex;
+//   font-family: hwt-gothic-round, sans-serif;
+//   font-weight: 900;
+//   font-style: normal;
+//   font-size: 28px;
+//   letter-spacing: 0.1px;
+//   margin: 15px 20px;
+//   span {
+//     margin-bottom: 4px;
+//     margin-left: 6px;
+//   }
+// }
+
+/* layout */
+#sign_out {
+  // position: fixed;
+  // top: 0;
+  // z-index: 2;
+  width: 100%;
+  height: 105px;
+  padding: 5px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: $black;
+  // background-color: black;
+}
+
+// #chatroom {
+// margin-top: 100px;
+// margin-bottom: 80px;
+// }
+
+/* messages */
+// #panels-wrapper {
+//   width: 100%;
+//   height: 80vh;
+//   display: grid;
+//   grid-template-columns: 10% 65%;
+//   column-gap: min(2.5%, 30px);
+//   justify-content: center;
+// }
+
+// #users-wrapper {
+//   background-color: #fff;
+//   border-radius: 26px;
+// }
+
+// #scroll-wrapper {
+//   // width: 55%;
+//   grid-column: 2;
+//   height: 100%;
+//   overflow: auto;
+//   background-color: #fff;
+//   border-radius: 26px;
+//   padding: 0px 15px;
+// }
+
+// #messages-wrapper {
+//   // min-width: 800px;
+//   // max-width: 1400px;
+//   // width: 55%;
+//   // margin: 0 auto;
+//   padding: 0;
+// }
+
+li {
+  padding: 30px 0;
+  list-style-type: none;
+  display: flex;
+}
+
+// .chatroom--left {
+//   text-align: left;
+// }
+
+// .chatroom--right {
+//   flex-direction: row-reverse;
+//   text-align: right;
+// }
+
+// .message {
+//   display: flex;
+//   flex-direction: row-reverse;
+//   justify-content: flex-end;
+// }
+
+// .message--sent {
+//   display: flex;
+//   justify-content: flex-end;
+// }
+
+/* messages - user */
+.name {
+  font-family: forma-djr-micro, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.6;
+}
+
+// .avatar-wrapper {
+//   margin: 0px 9px;
+// }
+
+// .avatar {
+//   border-radius: 100%;
+// }
+
+// /* messages - text */
+// .content {
+//   margin-top: 5px;
+//   display: flex;
+//   text-align: left;
+//   > span {
+//     font-family: forma-djr-text;
+//     font-weight: 400;
+//     font-size: 16px;
+//     line-height: 21.5px;
+//     max-width: 400px;
+//     padding: 15px 20px;
+//     border-radius: 0px 24px 24px 24px;
+//     background-color: #ececec;
+//     // box-shadow: 0px -1px 1px 0px rgba(0, 0, 0, 0.02),
+//     // 0px 4px 5px 0px rgba(0, 0, 0, 0.1), 0px 0px 1px 0px rgba(0, 0, 0, 0.02);
+//   }
+// }
+
+// .content--sent {
+//   @extend .content;
+//   justify-content: flex-end;
+//   position: relative;
+//   > span {
+//     border-radius: 24px;
+//     background-color: $red;
+//     color: #fff;
+//   }
+//   &::after {
+//     content: "";
+//     position: absolute;
+//     right: -8px;
+//     top: 13px;
+//     width: 0;
+//     height: 0;
+//     border-style: solid;
+//     border-width: 10px 0 10px 20px;
+//     border-color: transparent transparent transparent $red;
+//   }
+// }
+
+.timestamp {
+  font-family: forma-djr-micro, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: center;
+  margin-top: 120px;
+  opacity: 0.4;
+}
+
+/* message input & send btn */
+form {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 72px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+form input {
+  width: 75%;
+  height: 40px;
+  border-radius: 24px 0px 0px 24px;
+  padding: 0 10px;
+  font-family: forma-djr-micro, sans-serif;
+  font-size: 14px;
+}
+
+form button {
+  width: 20%;
+  height: 40px;
+  // background-color: #00bf9d;
+  // color: white;
+  font-family: forma-djr-text, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 0px 24px 24px 0px;
+}

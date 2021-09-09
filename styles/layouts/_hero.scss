@@ -1,0 +1,21 @@
+@import "../helpers/variables";
+
+.hero {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 10fr 7fr;
+  overflow: hidden;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 40px;
+}
+
+.hero-image {
+  display: block;
+  position: relative;
+}
