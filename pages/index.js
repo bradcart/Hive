@@ -9,11 +9,13 @@ export default function Home() {
   // TODO: Build Loading Screen component
   return (
     <>
-      <Navbar />
       {!loadingUser && user ? (
         <Chatroom />
       ) : !loadingUser && !user ? (
-        <Hero />
+        <>
+          <Navbar />
+          <Hero />
+        </>
       ) : (
         <div>Loading...</div>
       )}

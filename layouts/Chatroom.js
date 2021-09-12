@@ -31,6 +31,7 @@ export const Chatroom = () => {
         }));
 
         setMessages(data);
+        console.log("triggered");
       });
   }, [db]);
 
@@ -61,8 +62,7 @@ export const Chatroom = () => {
   return (
     <main id="chatroom">
       <div className="chatroom-content">
-        <div className="users-container">
-          <div>Currently Online</div>
+        <div>
           <UserList />
         </div>
         <div className="messages-container">
@@ -85,9 +85,9 @@ export const Chatroom = () => {
                     }
                   >
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                      {/* {message.displayName ? (
+                      {message.displayName ? (
                         <span className="name">{message.displayName}</span>
-                      ) : null} */}
+                      ) : null}
                       <div
                         className={
                           sentByUser(message.uid)
@@ -103,9 +103,9 @@ export const Chatroom = () => {
                         <Image
                           className="avatar"
                           src={message.photoURL}
-                          alt="Avatar"
-                          width={60}
-                          height={60}
+                          alt={`${message.displayName}'s avatar`}
+                          width={48}
+                          height={48}
                           quality={100}
                         />
                       ) : null}
