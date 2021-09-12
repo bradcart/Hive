@@ -24,12 +24,11 @@ const db = firebase.firestore();
 
 /* hook to set user online and listen for disconnect */
 const useOnlinePresence = () => {
-  // user, database and firestore refs
   const userId = auth.currentUser.uid;
   const name = auth.currentUser.displayName;
   const photoUrl = auth.currentUser.photoURL;
-  const databaseRef = firebase.database().ref(`/status/${userId}`);
-  const firestoreRef = firebase.firestore().doc(`/status/${userId}`);
+  const dbStatusRef = firebase.database().ref(`/status/${userId}`);
+  const fsStatusRef = firebase.firestore().doc(`/status/${userId}`);
 
   const { currentRoom } = useUser();
 
@@ -65,29 +64,27 @@ const useOnlinePresence = () => {
 
   // add disconnect listener to database, then set user online in database & firestore
   const setOnlineStatus = () => {
-    databaseRef
+    dbStatusRef
       .onDisconnect()
       .set(databaseOffline)
       .then(() => {
-        databaseRef.set(databaseOnline);
-        firestoreRef.set(firestoreOnline);
+        dbStatusRef.set(databaseOnline);
+        fsStatusRef.set(firestoreOnline);
       });
   };
 
   useEffect(() => {
-    const unsubscribe = firebase
-      .database()
-      .ref(".info/connected")
-      .on("value", (snapshot) => {
-        if (snapshot && snapshot.val() == false) {
-          firestoreRef.set(firestoreOffline);
-          return;
-        }
+    const dbConnectionRef = firebase.database().ref(".info/connected");
+    const unsubscribe = dbConnectionRef.on("value", (snapshot) => {
+      if (snapshot && snapshot.val() == false) {
+        fsStatusRef.set(firestoreOffline);
+        return;
+      }
 
-        setOnlineStatus();
-      });
+      setOnlineStatus();
+    });
 
-    return unsubscribe;
+    return () => unsubscribe();
   }, [currentRoom]);
 };
 

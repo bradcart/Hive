@@ -4,13 +4,9 @@ import { auth } from "../firebase/clientApp";
 export const UserContext = createContext();
 
 export default function UserContextComp({ children }) {
-  const [user, setUser] = useState(() => auth.currentUser);
+  const [user, setUser] = useState(auth.currentUser);
   const [loadingUser, setLoadingUser] = useState(true);
   const [currentRoom, setCurrentRoom] = useState("general");
-
-  const authStateHandler = (callback) => {
-    return auth.onAuthStateChanged(callback);
-  };
 
   const respondToAuthStateChange = (user) => {
     if (user) {
@@ -23,16 +19,16 @@ export default function UserContextComp({ children }) {
   };
 
   useEffect(() => {
-    const unsubscriber = authStateHandler(respondToAuthStateChange);
+    const unsubscribe = auth.onAuthStateChanged(respondToAuthStateChange);
 
-    return () => unsubscriber();
+    return () => unsubscribe();
   }, []);
 
   const updateRoomState = (room) => {
     if (room === currentRoom) {
       return null;
     }
-    console.log("room changed to " + room);
+
     return setCurrentRoom(room);
   };
 

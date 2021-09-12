@@ -12,42 +12,32 @@ export const UserList = () => {
     const userStatusQuery = userStatusRef
       .where("state", "==", "online")
       .where("inRoom", "==", currentRoom);
+    // .orderBy("displayName")
+
     // setOnlineUsers([]);
 
-    const unsubscribe = userStatusQuery
-      // .orderBy("displayName")
-      .onSnapshot((snap) => {
-        const data = snap.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
+    const unsubscribe = userStatusQuery.onSnapshot((snap) => {
+      const data = snap.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
 
-        // const sortedData = data.sort((a, b) => {
-        //   let nameA = a.displayName.toLowerCase(),
-        //     nameB = b.displayName.toLowerCase();
-        //   if (nameA < nameB) {
-        //     return -1;
-        //   }
-        //   if (nameA > nameB) {
-        //     return 1;
-        //   }
-        //   return 0;
-        // });
+      setOnlineUsers(data);
+    });
 
-        setOnlineUsers(data);
-      });
-
-    return unsubscribe;
+    return () => unsubscribe();
   }, [currentRoom]);
 
+  /* the .some() check is probably unnecessary */
   return (
     <div className="userlist">
-      <div className="logo">{currentRoom}</div>
       {onlineUsers.length > 0 &&
       onlineUsers.some(
         (user) => user.displayName === auth.currentUser.displayName
-      )
-        ? onlineUsers.map((user, index) => (
+      ) ? (
+        <>
+          <div className="logo">{currentRoom}</div>
+          {onlineUsers.map((user) => (
             <div key={user.id}>
               <div className="userlist__user">
                 <span className="userlist__avatar">
@@ -63,8 +53,21 @@ export const UserList = () => {
                 {user.displayName}
               </div>
             </div>
-          ))
-        : null}
+          ))}
+        </>
+      ) : null}
     </div>
   );
 };
+
+// const sortedData = data.sort((a, b) => {
+//   let nameA = a.displayName.toLowerCase(),
+//     nameB = b.displayName.toLowerCase();
+//   if (nameA < nameB) {
+//     return -1;
+//   }
+//   if (nameA > nameB) {
+//     return 1;
+//   }
+//   return 0;
+// });

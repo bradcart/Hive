@@ -3,57 +3,45 @@ import Image from "next/image";
 // import { formatRelative } from "date-fns";
 import { useUser } from "../context/userContext";
 import { firebase, db, useOnlinePresence } from "../firebase/clientApp";
+import { RoomList } from "../components/RoomList";
 import { UserList } from "../components/UserList";
-import { LogoIcon } from "../components/Logo";
 
 export const Chatroom = () => {
   useOnlinePresence();
-  const { user, updateRoomState } = useUser();
-  const { uid, displayName, photoURL } = user;
-
-  const [rooms, setRooms] = useState([]);
-  const [currentRoom, setCurrentRoom] = useState("general");
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const { user, currentRoom } = useUser();
+  const { uid, displayName, photoURL } = user;
+
+  const dummySpace = useRef();
 
   useEffect(() => {
-    const unsubscriber = db.collection("rooms").onSnapshot((snap) => {
+    const messagesRef = db
+      .collection("rooms")
+      .doc(currentRoom)
+      .collection("messages");
+    const messagesQuery = messagesRef.orderBy("createdAt").limit(50);
+    const unsubscribe = messagesQuery.onSnapshot((snap) => {
       const data = snap.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
       }));
 
-      console.log(data);
-      setRooms(data);
+      setMessages(data);
     });
 
-    return unsubscriber;
-  }, []);
-
-  useEffect(() => {
-    const unsubscriber = db
-      .collection("rooms")
-      .doc(currentRoom)
-      .collection("messages")
-      .orderBy("createdAt")
-      .limit(100)
-      .onSnapshot((snap) => {
-        const data = snap.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-
-        setMessages(data);
-      });
-
-    return unsubscriber;
+    return () => unsubscribe();
   }, [currentRoom]);
 
-  const dummySpace = useRef();
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    db.collection("rooms").doc(currentRoom).collection("messages").add({
+    const messagesRef = db
+      .collection("rooms")
+      .doc(currentRoom)
+      .collection("messages");
+
+    messagesRef.add({
       text: newMessage,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid,
@@ -65,7 +53,7 @@ export const Chatroom = () => {
     dummySpace.current.scrollIntoView({ behavor: "smooth" });
   };
 
-  function sentByUser(userId) {
+  function sentOrReceived(userId) {
     if (userId === uid) {
       return true;
     } else {
@@ -76,33 +64,15 @@ export const Chatroom = () => {
   return (
     <main id="chatroom">
       <div className="chatroom-content">
-        <div className="chatroom-sidebar">
-          <div className="sidebar-logo">
-            <LogoIcon />
-            <div className="sidebar-separator" />
-          </div>
-          {rooms.map((room) => (
-            <div
-              key={room.id}
-              className="room-logo"
-              onClick={() => updateRoomState(room.id)}
-            >
-              {room.id}
-            </div>
-          ))}
-        </div>
-        {rooms.length > 0 ? (
-          <div>
-            <UserList currentRoom={currentRoom} />
-          </div>
-        ) : null}
+        <RoomList />
+        <UserList />
         <div className="messages-container">
           <ul className="messages-list">
             {messages.map((message) => (
               <li
                 key={message.id}
                 className={
-                  sentByUser(message.uid)
+                  sentOrReceived(message.uid)
                     ? "messages-list--right"
                     : "messages-list--left"
                 }
@@ -110,7 +80,7 @@ export const Chatroom = () => {
                 <div>
                   <div
                     className={
-                      sentByUser(message.uid)
+                      sentOrReceived(message.uid)
                         ? "message-sent"
                         : "message-received"
                     }
@@ -121,7 +91,7 @@ export const Chatroom = () => {
                       ) : null}
                       <div
                         className={
-                          sentByUser(message.uid)
+                          sentOrReceived(message.uid)
                             ? "message-sent--text"
                             : "message-received--text"
                         }
