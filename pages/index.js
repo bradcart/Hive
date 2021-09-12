@@ -4,14 +4,14 @@ import { Chatroom } from "../layouts/Chatroom";
 import { Navbar } from "../layouts/Navbar";
 
 export default function Home() {
-  const { user, loadingUser } = useUser();
+  const { currentUser, loadingCurrentUser } = useUser();
 
   // TODO: Build Loading Screen component
   return (
     <>
-      {!loadingUser && user ? (
+      {!loadingCurrentUser && currentUser ? (
         <Chatroom />
-      ) : !loadingUser && !user ? (
+      ) : !loadingCurrentUser && !currentUser ? (
         <>
           <Navbar />
           <Hero />

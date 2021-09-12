@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 // import { formatRelative } from "date-fns";
 import { useUser } from "../context/userContext";
+import { useRoom } from "../context/roomContext";
 import { firebase, db, useOnlinePresence } from "../firebase/clientApp";
 import { RoomList } from "../components/RoomList";
 import { UserList } from "../components/UserList";
@@ -10,8 +11,9 @@ export const Chatroom = () => {
   useOnlinePresence();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const { user, currentRoom } = useUser();
-  const { uid, displayName, photoURL } = user;
+  const { currentRoom } = useRoom();
+  const { currentUser } = useUser();
+  const { uid, displayName, photoURL } = currentUser;
 
   const dummySpace = useRef();
 

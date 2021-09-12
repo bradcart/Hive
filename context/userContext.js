@@ -4,17 +4,16 @@ import { auth } from "../firebase/clientApp";
 export const UserContext = createContext();
 
 export default function UserContextComp({ children }) {
-  const [user, setUser] = useState(auth.currentUser);
-  const [loadingUser, setLoadingUser] = useState(true);
-  const [currentRoom, setCurrentRoom] = useState("general");
+  const [currentUser, setCurrentUser] = useState(auth.currentUser);
+  const [loadingCurrentUser, setLoadingCurrentUser] = useState(true);
 
   const respondToAuthStateChange = (user) => {
     if (user) {
-      setUser(user);
-      setLoadingUser(false);
+      setCurrentUser(user);
+      setLoadingCurrentUser(false);
     } else {
-      setUser(null);
-      setLoadingUser(false);
+      setCurrentUser(null);
+      setLoadingCurrentUser(false);
     }
   };
 
@@ -24,17 +23,9 @@ export default function UserContextComp({ children }) {
     return () => unsubscribe();
   }, []);
 
-  const updateRoomState = (room) => {
-    if (room === currentRoom) {
-      return null;
-    }
-
-    return setCurrentRoom(room);
-  };
-
   return (
     <UserContext.Provider
-      value={{ user, setUser, loadingUser, currentRoom, updateRoomState }}
+      value={{ currentUser, setCurrentUser, loadingCurrentUser }}
     >
       {children}
     </UserContext.Provider>

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { db, auth } from "../firebase/clientApp";
+import { db } from "../firebase/clientApp";
 import { useUser } from "../context/userContext";
+import { useRoom } from "../context/roomContext";
 
 export const UserList = () => {
-  const { currentRoom } = useUser();
+  const { currentRoom } = useRoom();
+  const { currentUser } = useUser();
   const [onlineUsers, setOnlineUsers] = useState([]);
 
   useEffect(() => {
@@ -33,7 +35,7 @@ export const UserList = () => {
     <div className="userlist">
       {onlineUsers.length > 0 &&
       onlineUsers.some(
-        (user) => user.displayName === auth.currentUser.displayName
+        (user) => user.displayName === currentUser.displayName
       ) ? (
         <>
           <div className="logo">{currentRoom}</div>

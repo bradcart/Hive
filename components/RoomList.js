@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { useUser } from "../context/userContext";
+import { useRoom } from "../context/roomContext";
 import { db } from "../firebase/clientApp";
 import { LogoIcon } from "../components/Logo";
 
 export const RoomList = () => {
-  const { updateRoomState } = useUser();
+  const { updateRoomState } = useRoom();
 
   const [rooms, setRooms] = useState([]);
 

@@ -3,7 +3,7 @@ import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import "firebase/compat/database";
 import { useEffect } from "react";
-import { useUser } from "../context/userContext";
+import { useRoom } from "../context/roomContext";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -30,7 +30,7 @@ const useOnlinePresence = () => {
   const dbStatusRef = firebase.database().ref(`/status/${userId}`);
   const fsStatusRef = firebase.firestore().doc(`/status/${userId}`);
 
-  const { currentRoom } = useUser();
+  const { currentRoom } = useRoom();
 
   // values sent to database & firestore
   const databaseOffline = {
