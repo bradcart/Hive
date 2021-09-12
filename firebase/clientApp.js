@@ -3,6 +3,7 @@ import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import "firebase/compat/database";
 import { useEffect } from "react";
+import { useUser } from "../context/userContext";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -21,10 +22,6 @@ if (!firebase.apps.length) {
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-const authStateHandler = (callback) => {
-  return auth.onAuthStateChanged(callback);
-};
-
 /* hook to set user online and listen for disconnect */
 const useOnlinePresence = () => {
   // user, database and firestore refs
@@ -34,30 +31,36 @@ const useOnlinePresence = () => {
   const databaseRef = firebase.database().ref(`/status/${userId}`);
   const firestoreRef = firebase.firestore().doc(`/status/${userId}`);
 
+  const { currentRoom } = useUser();
+
   // values sent to database & firestore
   const databaseOffline = {
     state: "offline",
     displayName: name,
     photoURL: photoUrl,
     last_changed: firebase.database.ServerValue.TIMESTAMP,
+    inRoom: currentRoom,
   };
   const databaseOnline = {
     state: "online",
     displayName: name,
     photoURL: photoUrl,
     last_changed: firebase.database.ServerValue.TIMESTAMP,
+    inRoom: currentRoom,
   };
   const firestoreOffline = {
     state: "offline",
     displayName: name,
     photoURL: photoUrl,
     last_changed: firebase.firestore.FieldValue.serverTimestamp(),
+    inRoom: currentRoom,
   };
   const firestoreOnline = {
     state: "online",
     displayName: name,
     photoURL: photoUrl,
     last_changed: firebase.firestore.FieldValue.serverTimestamp(),
+    inRoom: currentRoom,
   };
 
   // add disconnect listener to database, then set user online in database & firestore
@@ -72,7 +75,7 @@ const useOnlinePresence = () => {
   };
 
   useEffect(() => {
-    const unsubscriber = firebase
+    const unsubscribe = firebase
       .database()
       .ref(".info/connected")
       .on("value", (snapshot) => {
@@ -84,8 +87,8 @@ const useOnlinePresence = () => {
         setOnlineStatus();
       });
 
-    return unsubscriber;
-  }, []);
+    return unsubscribe;
+  }, [currentRoom]);
 };
 
-export { firebase, auth, db, authStateHandler, useOnlinePresence };
+export { firebase, auth, db, useOnlinePresence };

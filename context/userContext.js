@@ -1,11 +1,16 @@
 import { useState, useEffect, createContext, useContext } from "react";
-import { firebase, auth, authStateHandler, db } from "../firebase/clientApp";
+import { auth } from "../firebase/clientApp";
 
 export const UserContext = createContext();
 
 export default function UserContextComp({ children }) {
   const [user, setUser] = useState(() => auth.currentUser);
   const [loadingUser, setLoadingUser] = useState(true);
+  const [currentRoom, setCurrentRoom] = useState("general");
+
+  const authStateHandler = (callback) => {
+    return auth.onAuthStateChanged(callback);
+  };
 
   const respondToAuthStateChange = (user) => {
     if (user) {
@@ -23,8 +28,18 @@ export default function UserContextComp({ children }) {
     return () => unsubscriber();
   }, []);
 
+  const updateRoomState = (room) => {
+    if (room === currentRoom) {
+      return null;
+    }
+    console.log("room changed to " + room);
+    return setCurrentRoom(room);
+  };
+
   return (
-    <UserContext.Provider value={{ user, setUser, loadingUser, db }}>
+    <UserContext.Provider
+      value={{ user, setUser, loadingUser, currentRoom, updateRoomState }}
+    >
       {children}
     </UserContext.Provider>
   );

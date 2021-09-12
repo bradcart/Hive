@@ -1,58 +1,68 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { db } from "../firebase/clientApp";
-import { Logo } from "./Logo";
+import { db, auth } from "../firebase/clientApp";
+import { useUser } from "../context/userContext";
 
 export const UserList = () => {
+  const { currentRoom } = useUser();
   const [onlineUsers, setOnlineUsers] = useState([]);
 
   useEffect(() => {
-    // const userStatusRef = db.collection("status");
-    // const userStatusQuery = userStatusRef.where("state", "==", "online");
-
-    db.collection("status")
+    const userStatusRef = db.collection("status");
+    const userStatusQuery = userStatusRef
       .where("state", "==", "online")
+      .where("inRoom", "==", currentRoom);
+    // setOnlineUsers([]);
+
+    const unsubscribe = userStatusQuery
+      // .orderBy("displayName")
       .onSnapshot((snap) => {
         const data = snap.docs.map((doc) => ({
           ...doc.data(),
           id: doc.id,
         }));
 
+        // const sortedData = data.sort((a, b) => {
+        //   let nameA = a.displayName.toLowerCase(),
+        //     nameB = b.displayName.toLowerCase();
+        //   if (nameA < nameB) {
+        //     return -1;
+        //   }
+        //   if (nameA > nameB) {
+        //     return 1;
+        //   }
+        //   return 0;
+        // });
+
         setOnlineUsers(data);
       });
-  }, []);
 
-  //   useEffect(() => {
-  //     console.log(onlineUsers);
-  //   }, [onlineUsers]);
+    return unsubscribe;
+  }, [currentRoom]);
 
   return (
     <div className="userlist">
-      <div className="logo">
-        <Logo />
-      </div>
-      {onlineUsers.length > 0
+      <div className="logo">{currentRoom}</div>
+      {onlineUsers.length > 0 &&
+      onlineUsers.some(
+        (user) => user.displayName === auth.currentUser.displayName
+      )
         ? onlineUsers.map((user, index) => (
-            <>
-              <div key={user.id} className="userlist__user">
+            <div key={user.id}>
+              <div className="userlist__user">
                 <span className="userlist__avatar">
                   <Image
                     className="avatar"
                     src={user.photoURL}
                     alt={`${user.displayName}`}
-                    width={36}
-                    height={36}
+                    width={32}
+                    height={32}
                     layout="fixed"
                   />
                 </span>
                 {user.displayName}
               </div>
-              {/* {console.log(index)}
-              {console.log(onlineUsers.length)} */}
-              {index === onlineUsers.length - 1 ? null : (
-                <hr className="userlist__separator" />
-              )}
-            </>
+            </div>
           ))
         : null}
     </div>

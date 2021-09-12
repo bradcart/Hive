@@ -6,7 +6,7 @@
   flex-direction: column;
   // border: 2px solid $black;
   // border-radius: 26px;
-  background-color: $white;
+  background-color: $whiteDim;
   overflow: hidden;
 }
 
@@ -27,7 +27,7 @@
 .userlist__user {
   display: flex;
   align-items: center;
-  padding: 15px 20px;
+  padding: 5px 20px;
   font-family: forma-djr-deck;
   font-size: 16px;
   font-weight: 400;
@@ -43,9 +43,9 @@
     position: absolute;
     bottom: 3px;
     right: 0;
-    width: 9px;
-    height: 9px;
-    border: 2px solid $offwhite;
+    width: 8px;
+    height: 8px;
+    border: 1px solid $whiteDim;
     border-radius: 999px;
     background-color: $green;
   }

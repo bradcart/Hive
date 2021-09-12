@@ -2,26 +2,39 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 // import { formatRelative } from "date-fns";
 import { useUser } from "../context/userContext";
-import {
-  firebase,
-  // db,
-  // attachMessageListener,
-  // addNewMessage,
-  useOnlinePresence,
-} from "../firebase/clientApp";
+import { firebase, db, useOnlinePresence } from "../firebase/clientApp";
 import { UserList } from "../components/UserList";
+import { LogoIcon } from "../components/Logo";
 
 export const Chatroom = () => {
   useOnlinePresence();
-  const { user, db } = useUser();
+  const { user, updateRoomState } = useUser();
   const { uid, displayName, photoURL } = user;
 
+  const [rooms, setRooms] = useState([]);
+  const [currentRoom, setCurrentRoom] = useState("general");
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
 
-  // TODO: add cleanup
   useEffect(() => {
-    db.collection("messages")
+    const unsubscriber = db.collection("rooms").onSnapshot((snap) => {
+      const data = snap.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      console.log(data);
+      setRooms(data);
+    });
+
+    return unsubscriber;
+  }, []);
+
+  useEffect(() => {
+    const unsubscriber = db
+      .collection("rooms")
+      .doc(currentRoom)
+      .collection("messages")
       .orderBy("createdAt")
       .limit(100)
       .onSnapshot((snap) => {
@@ -31,15 +44,16 @@ export const Chatroom = () => {
         }));
 
         setMessages(data);
-        console.log("triggered");
       });
-  }, [db]);
+
+    return unsubscriber;
+  }, [currentRoom]);
 
   const dummySpace = useRef();
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    db.collection("messages").add({
+    db.collection("rooms").doc(currentRoom).collection("messages").add({
       text: newMessage,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid,
@@ -62,9 +76,26 @@ export const Chatroom = () => {
   return (
     <main id="chatroom">
       <div className="chatroom-content">
-        <div>
-          <UserList />
+        <div className="chatroom-sidebar">
+          <div className="sidebar-logo">
+            <LogoIcon />
+            <div className="sidebar-separator" />
+          </div>
+          {rooms.map((room) => (
+            <div
+              key={room.id}
+              className="room-logo"
+              onClick={() => updateRoomState(room.id)}
+            >
+              {room.id}
+            </div>
+          ))}
         </div>
+        {rooms.length > 0 ? (
+          <div>
+            <UserList currentRoom={currentRoom} />
+          </div>
+        ) : null}
         <div className="messages-container">
           <ul className="messages-list">
             {messages.map((message) => (
@@ -127,7 +158,12 @@ export const Chatroom = () => {
             />
 
             <button type="submit" disabled={!newMessage}>
-              Send
+              <Image
+                src="/hive-send.svg"
+                alt="Send"
+                width={31.2}
+                height={26.7}
+              />
             </button>
           </form>
         </div>
