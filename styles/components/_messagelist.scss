@@ -1,0 +1,172 @@
+@import "../helpers/variables";
+
+.messages-container {
+  position: relative;
+  grid-column: 3;
+  justify-self: center;
+  align-self: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 26px;
+  background-color: #f3f4f2;
+  overflow: auto;
+}
+
+.messages-list {
+  padding: 60px 120px;
+}
+
+.messages-list--left {
+  text-align: left;
+  // pointer-events: none;
+  // &:hover {
+  //   background-color: #efefef;
+  //   .name {
+  //     opacity: 0.3;
+  //   }
+  // }
+}
+
+.messages-list--right {
+  @extend .messages-list--left;
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+li {
+  padding: 10px 0;
+  margin: 30px 0;
+  list-style-type: none;
+  display: flex;
+}
+
+.message-received {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  align-items: center;
+  // &:hover {
+  //   .name {
+  //     opacity: 0.6;
+  //   }
+  // }
+}
+
+.message-received--text {
+  margin-top: 1px;
+  display: flex;
+  text-align: left;
+  > span {
+    font-family: forma-djr-text, sans-serif;
+    font-weight: 400;
+    font-size: 32px;
+    // line-height: 21.5px;
+    max-width: 500px;
+    border-radius: 0px 24px 24px 24px;
+  }
+}
+
+.message-sent {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.message-sent--text {
+  @extend .message-received--text;
+  justify-content: flex-end;
+  position: relative;
+  > span {
+    border-radius: 24px 0 24px 24px;
+    // background-color: $red;
+    // color: #fff;
+  }
+  // &::after {
+  //   content: "";
+  //   position: absolute;
+  //   right: -8px;
+  //   top: 13px;
+  //   width: 0;
+  //   height: 0;
+  //   border-style: solid;
+  //   border-width: 10px 0 10px 20px;
+  //   border-color: transparent transparent transparent $red;
+  // }
+}
+
+.avatar-wrapper {
+  margin: 0px 20px;
+}
+
+.avatar {
+  border-radius: 100%;
+}
+
+.name {
+  font-family: forma-djr-micro, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: -14px;
+  opacity: 0.6;
+}
+
+.timestamp {
+  font-family: forma-djr-micro, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: center;
+  margin-top: 120px;
+  opacity: 0.4;
+}
+
+form {
+  position: sticky;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 72px;
+  padding: 0 120px;
+  display: flex;
+  //   justify-content: center;
+  align-items: center;
+}
+
+form input {
+  width: 90%;
+  height: 50px;
+  border: none;
+  border-radius: 14px;
+  padding: 0 20px;
+  margin: 0 20px;
+  font-family: forma-djr-text, sans-serif;
+  font-size: 18px;
+  background-color: #fbfaf8;
+  &:focus {
+    outline: none;
+    border-color: #4d90fe;
+    box-shadow: 0px 0px 0px 1px #4d90fe;
+  }
+}
+
+form button {
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 55px;
+  height: 55px;
+  border-radius: 999px;
+  background-color: $red;
+  // &:disabled {
+  //   background-color: gray;
+  // }
+  &:enabled {
+    &:hover {
+      background-color: $redDim;
+    }
+    &:active {
+      background-color: $redDimmer;
+    }
+  }
+}

@@ -1,12 +1,15 @@
-import "../styles/main.scss";
+import { AnimatePresence } from "framer-motion";
 import UserProvider from "../context/userContext";
 import RoomProvider from "../context/roomContext";
+import "../styles/main.scss";
 
 function MyApp({ Component, pageProps }) {
   return (
     <UserProvider>
       <RoomProvider>
-        <Component {...pageProps} />
+        <AnimatePresence exitBeforeEnter>
+          <Component {...pageProps} />
+        </AnimatePresence>
       </RoomProvider>
     </UserProvider>
   );

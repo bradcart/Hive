@@ -1,5 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
+import formatRelative from "date-fns/formatRelative";
 import { firebase, db } from "../firebase/clientApp";
 import { useRoom } from "../context/roomContext";
 import { useUser } from "../context/userContext";
@@ -50,6 +52,7 @@ export const MessageList = () => {
     dummySpace.current.scrollIntoView({ behavor: "smooth" });
   };
 
+  /* determine if message is from currentUser */
   function sentOrReceived(userId) {
     if (userId === uid) {
       return true;
@@ -58,10 +61,28 @@ export const MessageList = () => {
     }
   }
 
+  /* load higher resolution profile pic */
+  function replacePhotoUrl(url) {
+    const updatedUrl = url.replace("s96-c", "s192-c");
+    return updatedUrl;
+  }
+
+  const transition = { duration: 0.5, ease: [0.43, 0.13, 0.23, 0.96] };
+
+  const messageVariants = {
+    initial: { scale: 0.9, opacity: 0 },
+    enter: { scale: 1, opacity: 1, transition },
+    exit: {
+      scale: 0.5,
+      opacity: 0,
+      transition: { duration: 1.5, ...transition },
+    },
+  };
+
   return (
     <div className="messages-container">
       <ul className="messages-list">
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <li
             key={message.id}
             className={
@@ -71,15 +92,22 @@ export const MessageList = () => {
             }
           >
             <div>
-              <div
+              <motion.div
                 className={
                   sentOrReceived(message.uid)
                     ? "message-sent"
                     : "message-received"
                 }
+                variants={messageVariants}
+                initial="initial"
+                animate="enter"
+                exit="exit"
               >
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  {message.displayName ? (
+                  {(message.displayName &&
+                    messages[index - 1] &&
+                    messages[index - 1].displayName !== message.displayName) ||
+                  index === 0 ? (
                     <span className="name">{message.displayName}</span>
                   ) : null}
                   <div
@@ -96,33 +124,93 @@ export const MessageList = () => {
                   {message.photoURL ? (
                     <Image
                       className="avatar"
-                      src={message.photoURL}
+                      src={replacePhotoUrl(message.photoURL)}
                       alt={`${message.displayName}'s avatar`}
-                      width={48}
-                      height={48}
+                      width={120}
+                      height={120}
                       quality={100}
                     />
                   ) : null}
                 </div>
-              </div>
+              </motion.div>
             </div>
           </li>
         ))}
       </ul>
       <section ref={dummySpace}></section>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Type your message here..."
-        />
+      {messages.length > 0 ? (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Type your message here..."
+          />
 
-        <button type="submit" disabled={!newMessage}>
-          <Image src="/hive-send.svg" alt="Send" width={31.2} height={26.7} />
-        </button>
-      </form>
+          <button type="submit" disabled={!newMessage}>
+            <Image src="/hive-send.svg" alt="Send" width={31.2} height={26.7} />
+          </button>
+        </form>
+      ) : null}
     </div>
   );
 };
+
+/* TODO: cleanup this method that only shows timestamp every 10+ mins */
+/* {message.createdAt.seconds && i === 0 ? (
+              <div className="timestamp">
+                {formatRelative(
+                  new Date(message.createdAt.seconds * 1000),
+                  new Date()
+                )}
+              </div>
+            ) : message.createdAt.seconds &&
+              i > 0 &&
+              message.createdAt.seconds >
+                messages[i - 1].createdAt.seconds + 600 ? (
+              <div className="timestamp">
+                <hr
+                  style={{
+                    margin: "0px auto 15px auto",
+                    opacity: 0.2,
+                    width: "90%",
+                  }}
+                />
+                {formatRelative(
+                  new Date(message.createdAt.seconds * 1000),
+                  new Date()
+                )}
+              </div>
+            ) : null} */
+
+// useEffect(() => {
+//   const messagesRef = collection(db, "messages");
+//   const messagesQuery = query(messagesRef, orderBy("createdAt"), limit(100));
+
+//   onSnapshot(messagesQuery, (querySnapshot) => {
+//     const data = querySnapshot.docs.map((doc) => ({
+//       ...doc.data(),
+//       id: doc.id,
+//     }));
+
+//     setMessages(data);
+//   });
+// }, [db]);
+
+// const handleSubmit = (e) => {
+//   e.preventDefault();
+
+//   addDoc(collection(db, "messages"), {
+//     text: newMessage,
+//     createdAt: serverTimestamp(),
+//     uid,
+//     displayName,
+//     photoURL,
+//   });
+
+//   setNewMessage("");
+
+//   // scroll down the chat
+//   dummySpace.current.scrollIntoView({ behavor: "smooth" });
+// };

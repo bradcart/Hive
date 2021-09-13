@@ -6,20 +6,26 @@
   flex-direction: column;
   // border: 2px solid $black;
   // border-radius: 26px;
-  background-color: $whiteDim;
+  background-color: #e7e8e6;
+  color: $black;
   overflow: hidden;
 }
 
 .userlist__title {
-  height: 60px;
-  margin-bottom: 10px;
+  height: 50px;
+  // margin-bottom: 10px;
   width: 100%;
   display: flex;
+  margin: 0 30px;
   justify-content: center;
   align-items: center;
-  font-family: forma-djr-text, sans-serif;
+  font-family: forma-djr-deck, sans-serif;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
+  font-style: normal;
+  text-transform: capitalize;
+  opacity: 0.4;
+  border-bottom: 2px solid rgba($color: #030303, $alpha: 0.2);
   // color: $white;
   // background-color: $black;
 }
@@ -27,25 +33,24 @@
 .userlist__user {
   display: flex;
   align-items: center;
-  padding: 5px 20px;
-  font-family: forma-djr-deck;
+  margin: 30px;
+  font-family: forma-djr-deck, sans-serif;
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 500;
   font-style: normal;
-  color: $black;
 }
 
 .userlist__avatar {
-  margin-right: 7.5px;
+  margin-right: 10px;
   position: relative;
   &::after {
     content: "";
     position: absolute;
-    bottom: 3px;
-    right: 0;
-    width: 8px;
-    height: 8px;
-    border: 1px solid $whiteDim;
+    bottom: 5px;
+    right: -4px;
+    width: 9px;
+    height: 9px;
+    border: 2px solid #20221b;
     border-radius: 999px;
     background-color: $green;
   }

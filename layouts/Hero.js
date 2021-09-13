@@ -1,7 +1,7 @@
 import Image from "next/image";
+import imgSrc from "../public/landing3.jpg";
 import { firebase, auth } from "../firebase/clientApp";
 import { Button } from "../components/Button";
-import imgSrc from "../public/landing3.jpg";
 
 export const Hero = () => {
   const signInWithGoogle = async () => {

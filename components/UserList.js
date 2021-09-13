@@ -38,7 +38,7 @@ export const UserList = () => {
         (user) => user.displayName === currentUser.displayName
       ) ? (
         <>
-          <div className="logo">{currentRoom}</div>
+          <div className="userlist__title">{currentRoom} Chat</div>
           {onlineUsers.map((user) => (
             <div key={user.id}>
               <div className="userlist__user">
@@ -47,8 +47,8 @@ export const UserList = () => {
                     className="avatar"
                     src={user.photoURL}
                     alt={`${user.displayName}`}
-                    width={32}
-                    height={32}
+                    width={40}
+                    height={40}
                     layout="fixed"
                   />
                 </span>
