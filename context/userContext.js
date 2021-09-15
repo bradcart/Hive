@@ -25,7 +25,11 @@ export default function UserContextComp({ children }) {
 
   return (
     <UserContext.Provider
-      value={{ currentUser, setCurrentUser, loadingCurrentUser }}
+      value={{
+        currentUser,
+        setCurrentUser,
+        loadingCurrentUser,
+      }}
     >
       {children}
     </UserContext.Provider>

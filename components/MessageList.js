@@ -1,59 +1,63 @@
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import formatRelative from "date-fns/formatRelative";
-import { firebase, db } from "../firebase/clientApp";
+// import formatRelative from "date-fns/formatRelative";
+import { db } from "../firebase/clientApp";
 import { useRoom } from "../context/roomContext";
 import { useUser } from "../context/userContext";
+import { MessageInput } from "./MessageInput";
 
 export const MessageList = () => {
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
+  const [usersTyping, setUsersTyping] = useState([]);
 
+  /* contexts */
   const { currentRoom } = useRoom();
   const { currentUser } = useUser();
   const { uid, displayName, photoURL } = currentUser;
 
-  useEffect(() => {
-    const messagesRef = db
-      .collection("rooms")
-      .doc(currentRoom)
-      .collection("messages");
-    const messagesQuery = messagesRef.orderBy("createdAt").limit(50);
-    const unsubscribe = messagesQuery.onSnapshot((snap) => {
+  /* firebase refs & queries */
+  const messagesRef = db
+    .collection("rooms")
+    .doc(currentRoom)
+    .collection("messages");
+  const usersTypingRef = db.collection("status");
+
+  const messagesQuery = messagesRef.orderBy("createdAt").limit(50);
+  const usersTypingQuery = usersTypingRef
+    .where("state", "==", "online")
+    .where("inRoom", "==", currentRoom)
+    .where("isTyping", "==", true);
+  // .orderBy("last_changed");
+
+  /* method to add query snapshot listeners */
+  const addMessageAndTypingListeners = () => {
+    usersTypingQuery.onSnapshot((snap) => {
       const data = snap.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
       }));
+      setUsersTyping(data);
+    });
 
+    messagesQuery.onSnapshot((snap) => {
+      const data = snap.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
       setMessages(data);
     });
-
-    return () => unsubscribe();
-  }, [currentRoom]);
-
-  const dummySpace = useRef();
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const messagesRef = db
-      .collection("rooms")
-      .doc(currentRoom)
-      .collection("messages");
-    messagesRef.add({
-      text: newMessage,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      uid,
-      displayName,
-      photoURL,
-    });
-
-    setNewMessage("");
-    dummySpace.current.scrollIntoView({ behavor: "smooth" });
   };
 
-  /* determine if message is from currentUser */
-  function sentOrReceived(userId) {
+  /* query results change depending on currentRoom */
+  useEffect(() => {
+    addMessageAndTypingListeners();
+
+    return () => addMessageAndTypingListeners();
+  }, [currentRoom]);
+
+  /* determine if a message is from currentUser */
+  function sentByUser(userId) {
     if (userId === uid) {
       return true;
     } else {
@@ -67,8 +71,8 @@ export const MessageList = () => {
     return updatedUrl;
   }
 
+  /* framer motion stuff */
   const transition = { duration: 0.5, ease: [0.43, 0.13, 0.23, 0.96] };
-
   const messageVariants = {
     initial: { scale: 0.9, opacity: 0 },
     enter: { scale: 1, opacity: 1, transition },
@@ -86,7 +90,7 @@ export const MessageList = () => {
           <li
             key={message.id}
             className={
-              sentOrReceived(message.uid)
+              sentByUser(message.uid)
                 ? "messages-list--right"
                 : "messages-list--left"
             }
@@ -94,9 +98,7 @@ export const MessageList = () => {
             <div>
               <motion.div
                 className={
-                  sentOrReceived(message.uid)
-                    ? "message-sent"
-                    : "message-received"
+                  sentByUser(message.uid) ? "message-sent" : "message-received"
                 }
                 variants={messageVariants}
                 initial="initial"
@@ -104,6 +106,7 @@ export const MessageList = () => {
                 exit="exit"
               >
                 <div style={{ display: "flex", flexDirection: "column" }}>
+                  {/* show displayName if message is from different user than previous OR if it's the first message being mapped  */}
                   {(message.displayName &&
                     messages[index - 1] &&
                     messages[index - 1].displayName !== message.displayName) ||
@@ -112,7 +115,7 @@ export const MessageList = () => {
                   ) : null}
                   <div
                     className={
-                      sentOrReceived(message.uid)
+                      sentByUser(message.uid)
                         ? "message-sent--text"
                         : "message-received--text"
                     }
@@ -136,22 +139,22 @@ export const MessageList = () => {
             </div>
           </li>
         ))}
+        {usersTyping.length > 0
+          ? usersTyping.map((user) => (
+              <li key={user.id} className="typing-indicator">
+                {user.displayName} is typing...
+              </li>
+            ))
+          : null}
       </ul>
-      <section ref={dummySpace}></section>
 
       {messages.length > 0 ? (
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Type your message here..."
-          />
-
-          <button type="submit" disabled={!newMessage}>
-            <Image src="/hive-send.svg" alt="Send" width={31.2} height={26.7} />
-          </button>
-        </form>
+        <MessageInput
+          currentRoom={currentRoom}
+          uid={uid}
+          displayName={displayName}
+          photoURL={photoURL}
+        />
       ) : null}
     </div>
   );

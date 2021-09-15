@@ -4,6 +4,7 @@ import "firebase/compat/firestore";
 import "firebase/compat/database";
 import { useEffect } from "react";
 import { useRoom } from "../context/roomContext";
+import { useTyping } from "../context/typingContext";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -27,10 +28,12 @@ const useOnlinePresence = () => {
   const userId = auth.currentUser.uid;
   const name = auth.currentUser.displayName;
   const photoUrl = auth.currentUser.photoURL;
+
   const dbStatusRef = firebase.database().ref(`/status/${userId}`);
   const fsStatusRef = firebase.firestore().doc(`/status/${userId}`);
 
   const { currentRoom } = useRoom();
+  const { isTyping } = useTyping();
 
   // values sent to database & firestore
   const databaseOffline = {
@@ -39,6 +42,7 @@ const useOnlinePresence = () => {
     photoURL: photoUrl,
     last_changed: firebase.database.ServerValue.TIMESTAMP,
     inRoom: currentRoom,
+    isTyping: null,
   };
   const databaseOnline = {
     state: "online",
@@ -46,19 +50,29 @@ const useOnlinePresence = () => {
     photoURL: photoUrl,
     last_changed: firebase.database.ServerValue.TIMESTAMP,
     inRoom: currentRoom,
+    isTyping: isTyping,
   };
+
   const firestoreOffline = {
     state: "offline",
     displayName: name,
     photoURL: photoUrl,
     last_changed: firebase.firestore.FieldValue.serverTimestamp(),
     inRoom: currentRoom,
+    isTyping: null,
   };
+
   const firestoreOnline = {
     state: "online",
     displayName: name,
     photoURL: photoUrl,
     last_changed: firebase.firestore.FieldValue.serverTimestamp(),
+    inRoom: currentRoom,
+    isTyping: isTyping,
+  };
+
+  const userActivity = {
+    isTyping: isTyping,
     inRoom: currentRoom,
   };
 
@@ -73,6 +87,7 @@ const useOnlinePresence = () => {
       });
   };
 
+  /* TODO: Separate currentRoom/isTyping into separate effects */
   useEffect(() => {
     const dbConnectionRef = firebase.database().ref(".info/connected");
     const unsubscribe = dbConnectionRef.on("value", (snapshot) => {
@@ -85,7 +100,12 @@ const useOnlinePresence = () => {
     });
 
     return () => unsubscribe();
-  }, [currentRoom]);
+  }, []);
+
+  useEffect(() => {
+    dbStatusRef.update(userActivity);
+    fsStatusRef.update(userActivity);
+  }, [isTyping, currentRoom]);
 };
 
 export { firebase, auth, db, useOnlinePresence };
