@@ -9,7 +9,6 @@ export default function RoomContextComp({ children }) {
     if (room === currentRoom) {
       return null;
     }
-
     return setCurrentRoom(room);
   };
 

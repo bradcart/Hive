@@ -9,15 +9,13 @@ export const UserList = () => {
   const { currentUser } = useUser();
   const [onlineUsers, setOnlineUsers] = useState([]);
 
+  const userStatusRef = db.collection("status");
+  const userStatusQuery = userStatusRef
+    .where("state", "==", "online")
+    .where("inRoom", "==", currentRoom);
+  // .orderBy("displayName")
+
   useEffect(() => {
-    const userStatusRef = db.collection("status");
-    const userStatusQuery = userStatusRef
-      .where("state", "==", "online")
-      .where("inRoom", "==", currentRoom);
-    // .orderBy("displayName")
-
-    // setOnlineUsers([]);
-
     const unsubscribe = userStatusQuery.onSnapshot((snap) => {
       const data = snap.docs.map((doc) => ({
         ...doc.data(),
@@ -30,7 +28,6 @@ export const UserList = () => {
     return () => unsubscribe();
   }, [currentRoom]);
 
-  /* the .some() check is probably unnecessary */
   return (
     <div className="userlist">
       {onlineUsers.length > 0 &&
@@ -61,15 +58,3 @@ export const UserList = () => {
     </div>
   );
 };
-
-// const sortedData = data.sort((a, b) => {
-//   let nameA = a.displayName.toLowerCase(),
-//     nameB = b.displayName.toLowerCase();
-//   if (nameA < nameB) {
-//     return -1;
-//   }
-//   if (nameA > nameB) {
-//     return 1;
-//   }
-//   return 0;
-// });

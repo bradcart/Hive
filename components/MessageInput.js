@@ -57,6 +57,8 @@ export const MessageInput = ({ currentRoom, uid, displayName, photoURL }) => {
     }
   }
 
+  /* TODO: clean up isTyping to only be true when newMessage !== "" */
+
   /* onInput method */
   function onTypingStart(value) {
     setNewMessage(value);

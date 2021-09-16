@@ -19,7 +19,6 @@ export default function UserContextComp({ children }) {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(respondToAuthStateChange);
-
     return () => unsubscribe();
   }, []);
 

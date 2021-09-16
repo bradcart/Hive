@@ -52,7 +52,6 @@ const useOnlinePresence = () => {
     inRoom: currentRoom,
     isTyping: isTyping,
   };
-
   const firestoreOffline = {
     state: "offline",
     displayName: name,
@@ -61,7 +60,6 @@ const useOnlinePresence = () => {
     inRoom: currentRoom,
     isTyping: null,
   };
-
   const firestoreOnline = {
     state: "online",
     displayName: name,
@@ -70,13 +68,12 @@ const useOnlinePresence = () => {
     inRoom: currentRoom,
     isTyping: isTyping,
   };
-
   const userActivity = {
     isTyping: isTyping,
     inRoom: currentRoom,
   };
 
-  // add disconnect listener to database, then set user online in database & firestore
+  /* add disconnect listener to database, then set user online in database & firestore */
   const setOnlineStatus = () => {
     dbStatusRef
       .onDisconnect()
@@ -87,7 +84,6 @@ const useOnlinePresence = () => {
       });
   };
 
-  /* TODO: Separate currentRoom/isTyping into separate effects */
   useEffect(() => {
     const dbConnectionRef = firebase.database().ref(".info/connected");
     const unsubscribe = dbConnectionRef.on("value", (snapshot) => {
@@ -95,13 +91,13 @@ const useOnlinePresence = () => {
         fsStatusRef.set(firestoreOffline);
         return;
       }
-
       setOnlineStatus();
     });
 
     return () => unsubscribe();
   }, []);
 
+  /* update isTyping and currentRoom values on change */
   useEffect(() => {
     dbStatusRef.update(userActivity);
     fsStatusRef.update(userActivity);

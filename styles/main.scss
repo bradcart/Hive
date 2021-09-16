@@ -1,9 +1,10 @@
 @import "./helpers/variables";
 @import "./components/button";
 @import "./components/logo";
-@import "./components/messagelist";
-@import "./components/roomlist";
-@import "./components/userlist";
+@import "./components/room-list";
+@import "./components/user-list";
+@import "./components/message-list";
+@import "./components/message-input";
 @import "./layouts/navbar";
 @import "./layouts/hero";
 @import "./layouts/chatroom";

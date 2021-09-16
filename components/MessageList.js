@@ -20,39 +20,18 @@ export const MessageList = () => {
     .collection("rooms")
     .doc(currentRoom)
     .collection("messages");
-  // const usersTypingRef = db.collection("status");
-
   const messagesQuery = messagesRef.orderBy("createdAt").limit(50);
-  // const usersTypingQuery = usersTypingRef
-  // .where("state", "==", "online")
-  // .where("inRoom", "==", currentRoom)
-  // .where("isTyping", "==", true);
-  // .orderBy("last_changed");
 
-  /* method to add query snapshot listeners */
-  const addMessageAndTypingListeners = () => {
-    // usersTypingQuery.onSnapshot((snap) => {
-    //   const data = snap.docs.map((doc) => ({
-    //     ...doc.data(),
-    //     id: doc.id,
-    //   }));
-    //   setUsersTyping(data);
-    // });
-
-    messagesQuery.onSnapshot((snap) => {
+  /* populate messages array */
+  useEffect(() => {
+    const unsubscribe = messagesQuery.onSnapshot((snap) => {
       const data = snap.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
       }));
       setMessages(data);
     });
-  };
-
-  /* query results change depending on currentRoom */
-  useEffect(() => {
-    addMessageAndTypingListeners();
-
-    return () => addMessageAndTypingListeners();
+    return () => unsubscribe();
   }, [currentRoom]);
 
   /* determine if a message is from currentUser */
@@ -64,7 +43,7 @@ export const MessageList = () => {
     }
   }
 
-  /* load higher resolution profile pic */
+  /* load higher resolution avatar */
   function replacePhotoUrl(url) {
     const updatedUrl = url.replace("s96-c", "s192-c");
     return updatedUrl;
@@ -105,7 +84,7 @@ export const MessageList = () => {
                 exit="exit"
               >
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  {/* show displayName if message is from different user than previous OR if it's the first message being mapped  */}
+                  {/* show displayName if message is from different user than previous OR if it's the first message in room  */}
                   {(message.displayName &&
                     messages[index - 1] &&
                     messages[index - 1].displayName !== message.displayName) ||
@@ -151,61 +130,3 @@ export const MessageList = () => {
     </div>
   );
 };
-
-/* TODO: cleanup this method that only shows timestamp every 10+ mins */
-/* {message.createdAt.seconds && i === 0 ? (
-              <div className="timestamp">
-                {formatRelative(
-                  new Date(message.createdAt.seconds * 1000),
-                  new Date()
-                )}
-              </div>
-            ) : message.createdAt.seconds &&
-              i > 0 &&
-              message.createdAt.seconds >
-                messages[i - 1].createdAt.seconds + 600 ? (
-              <div className="timestamp">
-                <hr
-                  style={{
-                    margin: "0px auto 15px auto",
-                    opacity: 0.2,
-                    width: "90%",
-                  }}
-                />
-                {formatRelative(
-                  new Date(message.createdAt.seconds * 1000),
-                  new Date()
-                )}
-              </div>
-            ) : null} */
-
-// useEffect(() => {
-//   const messagesRef = collection(db, "messages");
-//   const messagesQuery = query(messagesRef, orderBy("createdAt"), limit(100));
-
-//   onSnapshot(messagesQuery, (querySnapshot) => {
-//     const data = querySnapshot.docs.map((doc) => ({
-//       ...doc.data(),
-//       id: doc.id,
-//     }));
-
-//     setMessages(data);
-//   });
-// }, [db]);
-
-// const handleSubmit = (e) => {
-//   e.preventDefault();
-
-//   addDoc(collection(db, "messages"), {
-//     text: newMessage,
-//     createdAt: serverTimestamp(),
-//     uid,
-//     displayName,
-//     photoURL,
-//   });
-
-//   setNewMessage("");
-
-//   // scroll down the chat
-//   dummySpace.current.scrollIntoView({ behavor: "smooth" });
-// };
