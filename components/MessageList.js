@@ -9,7 +9,6 @@ import { MessageInput } from "./MessageInput";
 
 export const MessageList = () => {
   const [messages, setMessages] = useState([]);
-  const [usersTyping, setUsersTyping] = useState([]);
 
   /* contexts */
   const { currentRoom } = useRoom();
@@ -21,24 +20,24 @@ export const MessageList = () => {
     .collection("rooms")
     .doc(currentRoom)
     .collection("messages");
-  const usersTypingRef = db.collection("status");
+  // const usersTypingRef = db.collection("status");
 
   const messagesQuery = messagesRef.orderBy("createdAt").limit(50);
-  const usersTypingQuery = usersTypingRef
-    .where("state", "==", "online")
-    .where("inRoom", "==", currentRoom)
-    .where("isTyping", "==", true);
+  // const usersTypingQuery = usersTypingRef
+  // .where("state", "==", "online")
+  // .where("inRoom", "==", currentRoom)
+  // .where("isTyping", "==", true);
   // .orderBy("last_changed");
 
   /* method to add query snapshot listeners */
   const addMessageAndTypingListeners = () => {
-    usersTypingQuery.onSnapshot((snap) => {
-      const data = snap.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      setUsersTyping(data);
-    });
+    // usersTypingQuery.onSnapshot((snap) => {
+    //   const data = snap.docs.map((doc) => ({
+    //     ...doc.data(),
+    //     id: doc.id,
+    //   }));
+    //   setUsersTyping(data);
+    // });
 
     messagesQuery.onSnapshot((snap) => {
       const data = snap.docs.map((doc) => ({
@@ -139,13 +138,6 @@ export const MessageList = () => {
             </div>
           </li>
         ))}
-        {usersTyping.length > 0
-          ? usersTyping.map((user) => (
-              <li key={user.id} className="typing-indicator">
-                {user.displayName} is typing...
-              </li>
-            ))
-          : null}
       </ul>
 
       {messages.length > 0 ? (
