@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-dropdown-menu": "^0.1.0",
     "date-fns": "^2.23.0",
     "firebase": "^9.0.1",
     "firebase-functions": "^3.15.5",

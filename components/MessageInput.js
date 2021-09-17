@@ -36,7 +36,7 @@ export const MessageInput = ({ currentRoom, uid, displayName, photoURL }) => {
     if (array.length > 1) {
       return (
         <div className="typing-indicator">
-          <span>{lastUser} + 1 other</span>&nbsp;is typing...
+          <span>{lastUser} + 1 other</span> is typing...
         </div>
       );
     } else if (array.length > 2) {

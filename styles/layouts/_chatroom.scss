@@ -8,11 +8,12 @@
   align-items: center;
 }
 
-.chatroom-content {
+.chatroom__content {
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-columns: 72px 240px 1fr;
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: 100%;
   // column-gap: min(2.5%, 30px);
   justify-content: center;
 }

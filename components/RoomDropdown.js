@@ -1,9 +1,24 @@
 import { useState, useEffect } from "react";
 import { useRoom } from "../context/roomContext";
 import { db } from "../firebase/clientApp";
-import { LogoIcon } from "../components/Logo";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
-export const RoomList = () => {
+const Dropdown = ({ children }) => {
+  const { currentRoom } = useRoom();
+  return (
+    <DropdownMenu.Root className="dropdown">
+      <DropdownMenu.Trigger className="dropdown__trigger">
+        {currentRoom}
+        <div className="dropdown__arrow" />
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content className="dropdown__content">
+        {children}
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+};
+
+export const RoomDropdown = () => {
   const [rooms, setRooms] = useState([]);
   const { currentRoom, updateRoomState } = useRoom();
 
@@ -25,22 +40,18 @@ export const RoomList = () => {
   }
 
   return (
-    <div className="chatroom-sidebar">
-      <div className="sidebar-logo">
-        <LogoIcon />
-        <div className="sidebar-separator" />
-      </div>
+    <Dropdown>
       {rooms.map((room) => (
-        <button
+        <DropdownMenu.Item
           key={room.id}
           className={
-            room.id === currentRoom ? "room-logo--active" : "room-logo"
+            room.id === currentRoom ? "dropdown__item" : "dropdown__item"
           }
-          onClick={() => updateRoomState(room.id)}
+          onSelect={() => updateRoomState(room.id)}
         >
-          {getFirstLetter(room.id)}
-        </button>
+          {room.id}
+        </DropdownMenu.Item>
       ))}
-    </div>
+    </Dropdown>
   );
 };

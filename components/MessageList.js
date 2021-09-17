@@ -20,8 +20,9 @@ export const MessageList = () => {
     .collection("rooms")
     .doc(currentRoom)
     .collection("messages");
-  const messagesQuery = messagesRef.orderBy("createdAt").limit(50);
+  const messagesQuery = messagesRef.orderBy("createdAt").limitToLast(15);
 
+  /* TODO: fix dependency array */
   /* populate messages array */
   useEffect(() => {
     const unsubscribe = messagesQuery.onSnapshot((snap) => {
@@ -43,6 +44,17 @@ export const MessageList = () => {
     }
   }
 
+  // function diffUserThanLast(message, index) {
+  //   const previousMessage = messages[index - 1];
+  //   if (message.uid && previousMessage && previousMessage.uid !== message.uid) {
+  //     return true;
+  //   } else if (index === 0) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
   /* load higher resolution avatar */
   function replacePhotoUrl(url) {
     const updatedUrl = url.replace("s96-c", "s192-c");
@@ -63,58 +75,48 @@ export const MessageList = () => {
 
   return (
     <div className="messages-container">
-      <ul className="messages-list">
+      <ul className="message-list">
         {messages.map((message, index) => (
           <li
-            key={message.id}
             className={
-              sentByUser(message.uid)
-                ? "messages-list--right"
-                : "messages-list--left"
+              sentByUser(message.uid) ? "list-item--sent" : "list-item"
             }
+            key={message.id}
           >
-            <div>
-              <motion.div
+            <motion.div
+              className="motion-div"
+              variants={messageVariants}
+              initial="initial"
+              animate="enter"
+              exit="exit"
+            >
+              <div
                 className={
-                  sentByUser(message.uid) ? "message-sent" : "message-received"
+                  sentByUser(message.uid)
+                    ? "list-item__inner--sent"
+                    : "list-item__inner"
                 }
-                variants={messageVariants}
-                initial="initial"
-                animate="enter"
-                exit="exit"
               >
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  {/* show displayName if message is from different user than previous OR if it's the first message in room  */}
-                  {(message.displayName &&
-                    messages[index - 1] &&
-                    messages[index - 1].displayName !== message.displayName) ||
-                  index === 0 ? (
-                    <span className="name">{message.displayName}</span>
-                  ) : null}
-                  <div
-                    className={
-                      sentByUser(message.uid)
-                        ? "message-sent--text"
-                        : "message-received--text"
-                    }
-                  >
-                    <span>{message.text}</span>
-                  </div>
-                </div>
                 <div className="avatar-wrapper">
                   {message.photoURL ? (
                     <Image
                       className="avatar"
                       src={replacePhotoUrl(message.photoURL)}
                       alt={`${message.displayName}'s avatar`}
-                      width={120}
-                      height={120}
-                      quality={100}
+                      width={100}
+                      height={100}
+                      quality={95}
+                      layout="fixed"
                     />
                   ) : null}
                 </div>
-              </motion.div>
-            </div>
+
+                <div className="name-text-wrapper">
+                  <span className="name">{message.displayName}</span>
+                  <p className="text">{message.text}</p>
+                </div>
+              </div>
+            </motion.div>
           </li>
         ))}
       </ul>

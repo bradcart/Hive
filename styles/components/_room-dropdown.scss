@@ -1,0 +1,66 @@
+@import "../helpers/variables";
+
+.dropdown__trigger {
+  // Reset
+  border: none;
+  padding: 0;
+  margin: 0;
+
+  width: 105px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+  margin-top: 10px;
+  // margin-bottom: 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: baseline;
+  font-family: forma-djr-deck, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  font-style: normal;
+  text-transform: capitalize;
+  background-color: transparent;
+  color: $white;
+  border-bottom: 1px solid $white;
+}
+
+.dropdown__arrow {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid #f3f4f2;
+}
+
+.dropdown__content {
+  width: 105px;
+  padding: 10px 0;
+  background-color: $onyx;
+}
+
+.dropdown__item {
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  padding: 10px;
+  text-transform: capitalize;
+  color: $white;
+  &:hover {
+    opacity: 0.7;
+    background-color: #f3f4f2;
+    color: #030303;
+  }
+  &:active {
+    opacity: 1;
+  }
+  // &--selected {
+  //   @extend .dropdown__item;
+  //   cursor: default;
+  //   box-shadow: 0px 0px 0px 2px $green;
+  //   &:hover {
+  //     opacity: 1;
+  //     background-color: #030303;
+  //     color: #f3f4f2;
+  //   }
+  // }
+}

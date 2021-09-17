@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import Image from "next/image";
+// import Image from "next/image";
 import { db } from "../firebase/clientApp";
 import { useUser } from "../context/userContext";
 import { useRoom } from "../context/roomContext";
 
-export const UserList = () => {
+export const OnlineList = () => {
   const { currentRoom } = useRoom();
   const { currentUser } = useUser();
   const [onlineUsers, setOnlineUsers] = useState([]);
@@ -29,17 +29,19 @@ export const UserList = () => {
   }, [currentRoom]);
 
   return (
-    <div className="userlist">
+    <div className="online-list">
       {onlineUsers.length > 0 &&
       onlineUsers.some(
         (user) => user.displayName === currentUser.displayName
       ) ? (
         <>
-          <div className="userlist__title">{currentRoom} Chat</div>
+          <div className="online-list__header">
+            {onlineUsers.length}&nbsp;
+            {onlineUsers.length > 1 ? " users online" : " user online"}
+          </div>
           {onlineUsers.map((user) => (
-            <div key={user.id}>
-              <div className="userlist__user">
-                <span className="userlist__avatar">
+            <div key={user.id} className="online-list__item">
+              {/* <span className="online-list__avatar">
                   <Image
                     className="avatar"
                     src={user.photoURL}
@@ -48,9 +50,9 @@ export const UserList = () => {
                     height={40}
                     layout="fixed"
                   />
-                </span>
-                {user.displayName}
-              </div>
+                </span> */}
+              <div className="green-dot" />
+              {user.displayName}
             </div>
           ))}
         </>

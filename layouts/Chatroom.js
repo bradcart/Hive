@@ -1,6 +1,5 @@
 import { useOnlinePresence } from "../firebase/clientApp";
-import { RoomList } from "../components/RoomList";
-import { UserList } from "../components/UserList";
+import { Sidebar } from "./Sidebar";
 import { MessageList } from "../components/MessageList";
 
 export const Chatroom = () => {
@@ -8,9 +7,8 @@ export const Chatroom = () => {
 
   return (
     <main id="chatroom">
-      <div className="chatroom-content">
-        <RoomList />
-        <UserList />
+      <div className="chatroom__content">
+        <Sidebar />
         <MessageList />
       </div>
     </main>

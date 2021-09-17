@@ -1,47 +1,44 @@
 @import "../helpers/variables";
 
-.userlist {
+.online-list {
   height: 100%;
   display: flex;
   flex-direction: column;
-  // align-items: center;
-  // border: 2px solid $black;
-  // border-radius: 26px;
-  background-color: #e7e8e6;
-  color: $black;
-  overflow: hidden;
 }
 
-.userlist__title {
-  height: 50px;
-  margin-bottom: 20px;
+.online-list__header {
   width: 100%;
+  margin-top: 25px;
+  margin-bottom: 10px;
   display: flex;
-  // margin: 0 30px;
   justify-content: center;
   align-items: center;
   font-family: forma-djr-deck, sans-serif;
   font-size: 16px;
   font-weight: 500;
   font-style: normal;
-  text-transform: capitalize;
-  opacity: 0.4;
-  border-bottom: 2px solid rgba($color: #030303, $alpha: 0.2);
-  // color: $white;
-  // background-color: $black;
+  color: $green;
 }
 
-.userlist__user {
+.green-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  margin-right: 10px;
+  background-color: $green;
+}
+
+.online-list__item {
   display: flex;
   align-items: center;
-  margin: 10px 0 10px 40px;
+  margin: 10px 0;
   font-family: forma-djr-deck, sans-serif;
   font-size: 16px;
   font-weight: 500;
   font-style: normal;
 }
 
-.userlist__avatar {
+.online-list__avatar {
   margin-right: 10px;
   position: relative;
   &::after {
@@ -55,9 +52,4 @@
     border-radius: 999px;
     background-color: $green;
   }
-}
-
-.userlist__separator {
-  margin: 0 auto;
-  width: 65%;
 }
