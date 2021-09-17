@@ -1,6 +1,8 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
+// import { getAuth } from "firebase/auth";
 import "firebase/compat/firestore";
+// import { getFirestore } from "firebase/firestore";
 import "firebase/compat/database";
 import { useEffect } from "react";
 import { useRoom } from "../context/roomContext";

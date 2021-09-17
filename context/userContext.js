@@ -1,5 +1,6 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import { auth } from "../firebase/clientApp";
+import { onAuthStateChanged } from "@firebase/auth";
 
 export const UserContext = createContext();
 
@@ -18,7 +19,9 @@ export default function UserContextComp({ children }) {
   };
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(respondToAuthStateChange);
+    const unsubscribe = onAuthStateChanged(auth, (user) =>
+      respondToAuthStateChange(user)
+    );
     return () => unsubscribe();
   }, []);
 

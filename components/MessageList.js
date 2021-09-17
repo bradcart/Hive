@@ -1,43 +1,46 @@
-import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 // import formatRelative from "date-fns/formatRelative";
-import { db } from "../firebase/clientApp";
+import { useUser, useFirestore, useFirestoreCollectionData } from "reactfire";
+import {
+  collection,
+  query,
+  doc,
+  orderBy,
+  limitToLast,
+} from "firebase/firestore";
 import { useRoom } from "../context/roomContext";
-import { useUser } from "../context/userContext";
 import { MessageInput } from "./MessageInput";
 
 export const MessageList = () => {
-  const [messages, setMessages] = useState([]);
-
   /* contexts */
   const { currentRoom } = useRoom();
-  const { currentUser } = useUser();
-  const { uid, displayName, photoURL } = currentUser;
+  const { data: currentUser } = useUser();
+  const firestore = useFirestore();
 
-  /* firebase refs & queries */
-  const messagesRef = db
-    .collection("rooms")
-    .doc(currentRoom)
-    .collection("messages");
-  const messagesQuery = messagesRef.orderBy("createdAt").limitToLast(15);
+  /* refs */
+  const roomsRef = collection(firestore, "rooms");
+  const currentRoomRef = doc(roomsRef, currentRoom);
+  const messagesRef = collection(currentRoomRef, "messages");
 
-  /* TODO: fix dependency array */
-  /* populate messages array */
-  useEffect(() => {
-    const unsubscribe = messagesQuery.onSnapshot((snap) => {
-      const data = snap.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      setMessages(data);
-    });
-    return () => unsubscribe();
-  }, [currentRoom]);
+  /* query */
+  const messagesQuery = query(
+    messagesRef,
+    orderBy("createdAt"),
+    limitToLast(15)
+  );
+
+  /* subscribe to collection */
+  const { status: loadStatus, data: messages } = useFirestoreCollectionData(
+    messagesQuery,
+    {
+      idField: "id",
+    }
+  );
 
   /* determine if a message is from currentUser */
   function sentByUser(userId) {
-    if (userId === uid) {
+    if (userId === currentUser.uid) {
       return true;
     } else {
       return false;
@@ -76,57 +79,58 @@ export const MessageList = () => {
   return (
     <div className="messages-container">
       <ul className="message-list">
-        {messages.map((message, index) => (
-          <li
-            className={
-              sentByUser(message.uid) ? "list-item--sent" : "list-item"
-            }
-            key={message.id}
-          >
-            <motion.div
-              className="motion-div"
-              variants={messageVariants}
-              initial="initial"
-              animate="enter"
-              exit="exit"
+        {loadStatus === "success" &&
+          messages.map((message, index) => (
+            <li
+              className={
+                sentByUser(message.uid) ? "list-item--sent" : "list-item"
+              }
+              key={message.id}
             >
-              <div
-                className={
-                  sentByUser(message.uid)
-                    ? "list-item__inner--sent"
-                    : "list-item__inner"
-                }
+              <motion.div
+                className="motion-div"
+                variants={messageVariants}
+                initial="initial"
+                animate="enter"
+                exit="exit"
               >
-                <div className="avatar-wrapper">
-                  {message.photoURL ? (
-                    <Image
-                      className="avatar"
-                      src={replacePhotoUrl(message.photoURL)}
-                      alt={`${message.displayName}'s avatar`}
-                      width={100}
-                      height={100}
-                      quality={95}
-                      layout="fixed"
-                    />
-                  ) : null}
-                </div>
+                <div
+                  className={
+                    sentByUser(message.uid)
+                      ? "list-item__inner--sent"
+                      : "list-item__inner"
+                  }
+                >
+                  <div className="avatar-wrapper">
+                    {message.photoURL ? (
+                      <Image
+                        className="avatar"
+                        src={replacePhotoUrl(message.photoURL)}
+                        alt={`${message.displayName}'s avatar`}
+                        width={100}
+                        height={100}
+                        quality={95}
+                        layout="fixed"
+                      />
+                    ) : null}
+                  </div>
 
-                <div className="name-text-wrapper">
-                  <span className="name">{message.displayName}</span>
-                  <p className="text">{message.text}</p>
+                  <div className="name-text-wrapper">
+                    <span className="name">{message.displayName}</span>
+                    <p className="text">{message.text}</p>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          </li>
-        ))}
+              </motion.div>
+            </li>
+          ))}
       </ul>
 
-      {messages.length > 0 ? (
+      {loadStatus === "success" && messages.length > 0 ? (
         <MessageInput
           currentRoom={currentRoom}
-          uid={uid}
-          displayName={displayName}
-          photoURL={photoURL}
+          uid={currentUser.uid}
+          displayName={currentUser.displayName}
+          photoURL={currentUser.photoURL}
         />
       ) : null}
     </div>

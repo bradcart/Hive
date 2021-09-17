@@ -1,15 +1,18 @@
+import { useAuth } from "reactfire";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import Image from "next/image";
-import imgSrc from "../public/landing3.jpg";
-import { firebase, auth } from "../firebase/clientApp";
 import { Button } from "../components/Button";
+import imgSrc from "../public/landing3.jpg";
 
 export const Hero = () => {
+  const auth = useAuth();
+
   const signInWithGoogle = async () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.useDeviceLanguage();
+    const provider = new GoogleAuthProvider();
+    // auth.useDeviceLanguage();
 
     try {
-      await auth.signInWithPopup(provider);
+      await signInWithPopup(auth, provider);
     } catch (err) {
       console.log(err);
     }
