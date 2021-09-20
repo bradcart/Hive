@@ -1,39 +1,30 @@
-import { useEffect, useState } from "react";
 // import Image from "next/image";
-import { db } from "../firebase/clientApp";
-import { useUser } from "../context/userContext";
 import { useRoom } from "../context/roomContext";
+import { useFirestore, useFirestoreCollectionData } from "reactfire";
+import { collection, query, where } from "@firebase/firestore";
 
 export const OnlineList = () => {
   const { currentRoom } = useRoom();
-  const { currentUser } = useUser();
-  const [onlineUsers, setOnlineUsers] = useState([]);
+  // const { data: currentUser } = useUser();
 
-  const userStatusRef = db.collection("status");
-  const userStatusQuery = userStatusRef
-    .where("state", "==", "online")
-    .where("inRoom", "==", currentRoom);
-  // .orderBy("displayName")
+  const firestore = useFirestore();
+  const usersRef = collection(firestore, "status");
+  const usersQuery = query(
+    usersRef,
+    where("state", "==", "online"),
+    where("inRoom", "==", currentRoom)
+  );
 
-  useEffect(() => {
-    const unsubscribe = userStatusQuery.onSnapshot((snap) => {
-      const data = snap.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-
-      setOnlineUsers(data);
-    });
-
-    return () => unsubscribe();
-  }, [currentRoom]);
+  const { status: loading, data: onlineUsers } = useFirestoreCollectionData(
+    usersQuery,
+    {
+      idField: "id",
+    }
+  );
 
   return (
     <div className="online-list">
-      {onlineUsers.length > 0 &&
-      onlineUsers.some(
-        (user) => user.displayName === currentUser.displayName
-      ) ? (
+      {loading === "success" ? (
         <>
           <div className="online-list__header">
             {onlineUsers.length}&nbsp;

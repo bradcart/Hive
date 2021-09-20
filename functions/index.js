@@ -4,11 +4,11 @@ admin.initializeApp();
 
 const db = admin.firestore();
 
-exports.createUserDocument = functions.auth.user().onCreate((user) => {
-  db.collection("users")
-    .doc(user.uid)
-    .set(JSON.parse(JSON.stringify(user)));
-});
+// exports.createUserDocument = functions.auth.user().onCreate((user) => {
+//   db.collection("users")
+//     .doc(user.uid)
+//     .set(JSON.parse(JSON.stringify(user)));
+// });
 
 exports.onUserStatusChanged = functions.database
   .ref("/status/{uid}")

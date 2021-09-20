@@ -8,7 +8,7 @@ import {
   doc,
   orderBy,
   limitToLast,
-} from "firebase/firestore";
+} from "@firebase/firestore";
 import { useRoom } from "../context/roomContext";
 import { MessageInput } from "./MessageInput";
 
@@ -127,6 +127,7 @@ export const MessageList = () => {
 
       {loadStatus === "success" && messages.length > 0 ? (
         <MessageInput
+          firestore={firestore}
           currentRoom={currentRoom}
           uid={currentUser.uid}
           displayName={currentUser.displayName}

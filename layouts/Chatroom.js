@@ -1,4 +1,4 @@
-import { useOnlinePresence } from "../firebase/clientApp";
+import { useOnlinePresence } from "../firebase/useOnlinePresence";
 import { Sidebar } from "./Sidebar";
 import { MessageList } from "../components/MessageList";
 

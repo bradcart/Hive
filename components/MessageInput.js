@@ -1,26 +1,40 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { firebase, db } from "../firebase/clientApp";
+// import { firebase, db } from "../firebase/clientApp";
+import { useFirestoreCollectionData } from "reactfire";
+import {
+  collection,
+  doc,
+  addDoc,
+  query,
+  serverTimestamp,
+  where,
+} from "@firebase/firestore";
 import { useTyping } from "../context/typingContext";
 
 /*  typingContext is imported because this component needs to update Firebase directly.
 roomContext/userContext are already being used in parent component so they're passed as props instead. */
 
-export const MessageInput = ({ currentRoom, uid, displayName, photoURL }) => {
-  const [newMessage, setNewMessage] = useState("");
-  const [usersTyping, setUsersTyping] = useState([]);
+export const MessageInput = ({
+  firestore,
+  currentRoom,
+  uid,
+  displayName,
+  photoURL,
+}) => {
   const { isTyping, setIsTyping } = useTyping();
+  const [newMessage, setNewMessage] = useState("");
   const dummySpace = useRef();
+
+  const roomsRef = collection(firestore, "rooms");
+  const roomDoc = doc(roomsRef, currentRoom);
+  const messagesRef = collection(roomDoc, "messages");
 
   function handleSubmit(e) {
     e.preventDefault();
-    const messagesRef = db
-      .collection("rooms")
-      .doc(currentRoom)
-      .collection("messages");
-    messagesRef.add({
+    addDoc(messagesRef, {
       text: newMessage,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      createdAt: serverTimestamp(),
       uid,
       displayName,
       photoURL,
@@ -57,8 +71,6 @@ export const MessageInput = ({ currentRoom, uid, displayName, photoURL }) => {
     }
   }
 
-  /* TODO: clean up isTyping to only be true when newMessage !== "" */
-
   /* onInput method */
   function onTypingStart(value) {
     setNewMessage(value);
@@ -74,26 +86,23 @@ export const MessageInput = ({ currentRoom, uid, displayName, photoURL }) => {
   }, [isTyping]);
 
   /* populate usersTyping array */
-  const usersTypingRef = db.collection("status");
-  const usersTypingQuery = usersTypingRef
-    .where("state", "==", "online")
-    .where("inRoom", "==", currentRoom)
-    .where("isTyping", "==", true);
-  useEffect(() => {
-    const unsubscribe = usersTypingQuery.onSnapshot((snap) => {
-      const data = snap.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      setUsersTyping(data);
-    });
-    return () => unsubscribe();
-  }, [currentRoom]);
+  const usersTypingRef = collection(firestore, "status");
+  const usersTypingQuery = query(
+    usersTypingRef,
+    where("state", "==", "online"),
+    where("inRoom", "==", currentRoom),
+    where("isTyping", "==", true)
+  );
+  const { data: usersTyping } = useFirestoreCollectionData(usersTypingQuery, {
+    idField: "id",
+  });
 
   return (
     <div className="form-wrapper">
       <div ref={dummySpace}></div>
-      {usersTyping.length > 0 ? renderTypingIndicator(usersTyping) : null}
+      {usersTyping && usersTyping.length > 0
+        ? renderTypingIndicator(usersTyping)
+        : null}
       <form onSubmit={(e) => handleSubmit(e)}>
         <input
           type="text"
