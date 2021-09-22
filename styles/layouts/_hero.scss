@@ -1,4 +1,4 @@
-@import "../helpers/variables";
+@import "../helpers/colors";
 
 .hero {
   height: 100vh;
@@ -7,15 +7,38 @@
   overflow: hidden;
 }
 
-.hero-content {
+.hero__content {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 0 40px;
+  margin-top: 20px;
 }
 
-.hero-image {
+.hero__button {
+  cursor: pointer;
+  display: inline-block;
+  align-items: center;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  border: none;
+  border-radius: 999px;
+  padding: 20px 80px;
+  font-family: Gilroy, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  background-color: #000;
+  color: #fff;
+
+  &:hover {
+    opacity: 0.8;
+  }
+  &:active {
+    opacity: 1;
+  }
+}
+
+.hero__image {
   display: block;
   position: relative;
 }

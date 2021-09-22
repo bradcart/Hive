@@ -1,16 +1,14 @@
 import { useOnlinePresence } from "../firebase/useOnlinePresence";
-import { Sidebar } from "./Sidebar";
 import { MessageList } from "../components/MessageList";
 
-export const Chatroom = () => {
+export const Chatroom = ({ currentUser }) => {
   useOnlinePresence();
 
   return (
-    <main id="chatroom">
+    <div className="chatroom">
       <div className="chatroom__content">
-        <Sidebar />
-        <MessageList />
+        <MessageList currentUser={currentUser} />
       </div>
-    </main>
+    </div>
   );
 };

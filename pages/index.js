@@ -1,27 +1,40 @@
-import { useUser } from "reactfire";
+import { useUser, useSigninCheck } from "reactfire";
 import { Hero } from "../layouts/Hero";
 import { Chatroom } from "../layouts/Chatroom";
-import { Navbar } from "../layouts/Navbar";
+import { Sidebar } from "../layouts/Sidebar";
+// import { useEffect } from "react";
 
 export default function Home() {
-  const { status: loading, data: currentUser } = useUser();
+  const { data: currentUser } = useUser();
+  const { status, data: signInCheckResult } = useSigninCheck();
+
+  // useEffect(() => {
+  //   console.log("currentUser: " + currentUser);
+  //   console.log("status: " + status);
+  //   console.log("signInCheckResult: " + signInCheckResult);
+  // }, [currentUser, status, signInCheckResult]);
 
   // TODO: Build Loading Screen component
-  // TODO: Clean this up
   return (
-    <>
-      {loading === "success" && currentUser ? (
-        <Chatroom />
-      ) : !currentUser ? (
-        <>
-          <Navbar />
+    <div style={{ height: "100vh", overflow: "hidden" }}>
+      <Sidebar currentUser={currentUser} />
+      {
+        signInCheckResult && signInCheckResult.signedIn === true ? (
+          <Chatroom currentUser={currentUser} />
+        ) : signInCheckResult && signInCheckResult.signedIn === false ? (
           <Hero />
-        </>
-      ) : (
-        <div style={{ height: "100%", backgroundColor: "#ff0000" }}>
-          Loading...
-        </div>
-      )}
-    </>
+        ) : null
+        // <div
+        //   style={{
+        //     height: "100vh",
+        //     display: "flex",
+        //     justifyContent: "center",
+        //     alignItems: "center",
+        //   }}
+        // >
+        //   <h2>Loading...</h2>
+        // </div>
+      }
+    </div>
   );
 }

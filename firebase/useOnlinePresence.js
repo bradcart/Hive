@@ -2,13 +2,8 @@ import { useEffect } from "react";
 import {
   useUser,
   useFirestore,
-  // useFirestoreDoc,
-  // useFirestoreDocData,
-  // useFirestoreCollectionData,
   useDatabase,
-  // useDatabaseObject,
   useDatabaseObjectData,
-  // useDatabaseListData,
 } from "reactfire";
 import {
   ref,
@@ -20,8 +15,6 @@ import {
 import {
   doc,
   setDoc,
-  // addDoc,
-  // getDoc,
   updateDoc,
   serverTimestamp as firestoreTimestamp,
 } from "@firebase/firestore";

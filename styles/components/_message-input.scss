@@ -1,6 +1,6 @@
-@import "../helpers/variables";
+@import "../helpers/colors";
 
-.form-wrapper {
+.message-input {
   position: sticky;
   bottom: 0;
   right: 0;
@@ -14,11 +14,11 @@
   // );
 }
 
-.typing-indicator {
+.message-input__typing {
   position: absolute;
   top: 0;
-  left: 160px;
-  font-weight: 700;
+  left: calc(5% + 190px);
+  font-weight: 500;
   color: $red;
   > span {
     color: $red;
@@ -43,13 +43,13 @@ form input {
   font-family: forma-djr-text, sans-serif;
   font-size: 24px;
   background: transparent;
-  color: $white;
+  // color: $white;
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  border-bottom-color: rgba($color: $white, $alpha: 0.6);
+  border-bottom-color: rgba($color: #000, $alpha: 0.6);
   transition: border-bottom-color 0.3s ease;
   &::placeholder {
-    color: rgba($color: $white, $alpha: 0.6);
+    color: rgba($color: #000, $alpha: 0.65);
     transition-property: opacity, transform;
     transition-duration: 0.3s;
     transition-timing-function: ease;

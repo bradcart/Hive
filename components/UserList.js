@@ -5,7 +5,6 @@ import { collection, query, where } from "@firebase/firestore";
 
 export const OnlineList = () => {
   const { currentRoom } = useRoom();
-  // const { data: currentUser } = useUser();
 
   const firestore = useFirestore();
   const usersRef = collection(firestore, "status");
@@ -23,16 +22,16 @@ export const OnlineList = () => {
   );
 
   return (
-    <div className="online-list">
+    <div className="user-list">
       {loading === "success" ? (
         <>
-          <div className="online-list__header">
+          <div className="user-list__header">
             {onlineUsers.length}&nbsp;
             {onlineUsers.length > 1 ? " users online" : " user online"}
           </div>
           {onlineUsers.map((user) => (
-            <div key={user.id} className="online-list__item">
-              {/* <span className="online-list__avatar">
+            <div key={user.id} className="user-list__item">
+              {/* <span className="user-list__avatar">
                   <Image
                     className="avatar"
                     src={user.photoURL}

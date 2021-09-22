@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-// import { firebase, db } from "../firebase/clientApp";
 import { useFirestoreCollectionData } from "reactfire";
 import {
   collection,
@@ -23,6 +22,7 @@ export const MessageInput = ({
   photoURL,
 }) => {
   const { isTyping, setIsTyping } = useTyping();
+
   const [newMessage, setNewMessage] = useState("");
   const dummySpace = useRef();
 
@@ -49,13 +49,13 @@ export const MessageInput = ({
     const lastUser = array.slice(array.length - 1, array.length)[0].displayName;
     if (array.length > 1) {
       return (
-        <div className="typing-indicator">
+        <div className="message-input__typing">
           <span>{lastUser} + 1 other</span> is typing...
         </div>
       );
     } else if (array.length > 2) {
       return (
-        <div className="typing-indicator">
+        <div className="message-input__typing">
           <span>
             {lastUser} + {array.length - 1} others
           </span>
@@ -64,20 +64,20 @@ export const MessageInput = ({
       );
     } else {
       return (
-        <div className="typing-indicator">
+        <div className="message-input__typing">
           <span>{lastUser}</span>&nbsp;is typing...
         </div>
       );
     }
   }
 
-  /* onInput method */
+  /* render typing indicator */
   function onTypingStart(value) {
     setNewMessage(value);
     setIsTyping(true);
   }
 
-  /* debounce set isTyping to false */
+  /* debounced setIsTyping to false */
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       setIsTyping(false);
@@ -98,24 +98,26 @@ export const MessageInput = ({
   });
 
   return (
-    <div className="form-wrapper">
+    <>
       <div ref={dummySpace}></div>
-      {usersTyping && usersTyping.length > 0
-        ? renderTypingIndicator(usersTyping)
-        : null}
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <input
-          type="text"
-          value={newMessage}
-          onInput={(e) => onTypingStart(e.target.value)}
-          // onBlur={() => setIsTyping(false)}
-          placeholder="Type your message here..."
-        />
+      <div className="message-input">
+        {usersTyping && usersTyping.length > 0
+          ? renderTypingIndicator(usersTyping)
+          : null}
+        <form onSubmit={(e) => handleSubmit(e)}>
+          <input
+            type="text"
+            value={newMessage}
+            onInput={(e) => onTypingStart(e.target.value)}
+            // onBlur={() => setIsTyping(false)}
+            placeholder="Type your message here..."
+          />
 
-        <button type="submit" disabled={!newMessage}>
-          <Image src="/hive-send.svg" alt="Send" width={31.2} height={26.7} />
-        </button>
-      </form>
-    </div>
+          <button type="submit" disabled={!newMessage}>
+            <Image src="/hive-send.svg" alt="Send" width={31.2} height={26.7} />
+          </button>
+        </form>
+      </div>
+    </>
   );
 };

@@ -1,6 +1,6 @@
-@import "../helpers/variables";
+@import "../helpers/colors";
 
-.dropdown__trigger {
+.room-dropdown__trigger {
   // Reset
   border: none;
   padding: 0;
@@ -20,41 +20,42 @@
   font-style: normal;
   text-transform: capitalize;
   background-color: transparent;
-  color: $white;
-  border-bottom: 1px solid $white;
+  // color: $white;
+  border-bottom: 1px solid;
 }
 
-.dropdown__arrow {
+.room-dropdown__arrow {
   width: 0;
   height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-top: 8px solid #f3f4f2;
+  border-top: 8px solid;
 }
 
-.dropdown__content {
+.room-dropdown__content {
   width: 105px;
   padding: 10px 0;
-  background-color: $onyx;
+  background-color: #f3f4f2;
+  // background-color: $onyx;
 }
 
-.dropdown__item {
+.room-dropdown__item {
   cursor: pointer;
   border: none;
   width: 100%;
   padding: 10px;
   text-transform: capitalize;
-  color: $white;
+  // color: $white;
   &:hover {
-    opacity: 0.7;
-    background-color: #f3f4f2;
-    color: #030303;
+    // opacity: 0.7;
+    background-color: #000;
+    color: #fff;
   }
   &:active {
     opacity: 1;
   }
   // &--selected {
-  //   @extend .dropdown__item;
+  //   @extend .room-dropdown__item;
   //   cursor: default;
   //   box-shadow: 0px 0px 0px 2px $green;
   //   &:hover {

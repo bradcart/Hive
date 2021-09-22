@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
-// import formatRelative from "date-fns/formatRelative";
-import { useUser, useFirestore, useFirestoreCollectionData } from "reactfire";
+import { useFirestore, useFirestoreCollectionData } from "reactfire";
 import {
   collection,
   query,
@@ -9,13 +8,12 @@ import {
   orderBy,
   limitToLast,
 } from "@firebase/firestore";
+// import formatRelative from "date-fns/formatRelative";
 import { useRoom } from "../context/roomContext";
 import { MessageInput } from "./MessageInput";
 
-export const MessageList = () => {
-  /* contexts */
+export const MessageList = ({ currentUser }) => {
   const { currentRoom } = useRoom();
-  const { data: currentUser } = useUser();
   const firestore = useFirestore();
 
   /* refs */
@@ -77,13 +75,15 @@ export const MessageList = () => {
   };
 
   return (
-    <div className="messages-container">
+    <div className="message-list--wrapper">
       <ul className="message-list">
         {loadStatus === "success" &&
           messages.map((message, index) => (
             <li
               className={
-                sentByUser(message.uid) ? "list-item--sent" : "list-item"
+                sentByUser(message.uid)
+                  ? "message-list__item--sent"
+                  : "message-list__item"
               }
               key={message.id}
             >
@@ -96,15 +96,13 @@ export const MessageList = () => {
               >
                 <div
                   className={
-                    sentByUser(message.uid)
-                      ? "list-item__inner--sent"
-                      : "list-item__inner"
+                    sentByUser(message.uid) ? "content--sent" : "content"
                   }
                 >
-                  <div className="avatar-wrapper">
+                  <div className="content__avatar">
                     {message.photoURL ? (
                       <Image
-                        className="avatar"
+                        className="content__avatar--img"
                         src={replacePhotoUrl(message.photoURL)}
                         alt={`${message.displayName}'s avatar`}
                         width={100}
@@ -115,9 +113,11 @@ export const MessageList = () => {
                     ) : null}
                   </div>
 
-                  <div className="name-text-wrapper">
-                    <span className="name">{message.displayName}</span>
-                    <p className="text">{message.text}</p>
+                  <div className="content__text">
+                    <span className="content__text--name">
+                      {message.displayName}
+                    </span>
+                    <p className="content__text--message">{message.text}</p>
                   </div>
                 </div>
               </motion.div>

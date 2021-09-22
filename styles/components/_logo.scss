@@ -1,16 +1,15 @@
-.logo-wrapper {
+.logo {
   display: flex;
   // justify-content: center;
   align-items: center;
   margin: 30px;
 }
 
-.logo-text {
+.logo__text {
   font-family: hwt-gothic-round, sans-serif;
   font-weight: 900;
   font-style: normal;
-  font-size: 28px;
-  letter-spacing: 0.1px;
+  font-size: 30px;
   padding: 0px 5px;
-  margin-top: 8px;
+  margin-top: 5px;
 }

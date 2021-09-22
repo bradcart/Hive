@@ -36,8 +36,8 @@ export const LogoIcon = () => (
 );
 
 export const Logo = () => (
-  <div className="logo-wrapper">
+  <div className="logo">
     <LogoIcon />
-    <span className="logo-text">Hive</span>
+    <span className="logo__text">Hive</span>
   </div>
 );

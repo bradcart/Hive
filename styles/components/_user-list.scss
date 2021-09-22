@@ -1,12 +1,12 @@
-@import "../helpers/variables";
+@import "../helpers/colors";
 
-.online-list {
+.user-list {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.online-list__header {
+.user-list__header {
   width: 100%;
   margin-top: 25px;
   margin-bottom: 10px;
@@ -28,7 +28,7 @@
   background-color: $green;
 }
 
-.online-list__item {
+.user-list__item {
   display: flex;
   align-items: center;
   margin: 10px 0;
@@ -38,7 +38,7 @@
   font-style: normal;
 }
 
-.online-list__avatar {
+.user-list__avatar {
   margin-right: 10px;
   position: relative;
   &::after {

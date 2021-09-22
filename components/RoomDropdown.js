@@ -1,19 +1,17 @@
-import { useState, useEffect } from "react";
-import { useRoom } from "../context/roomContext";
-// import { db } from "../firebase/clientApp";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useFirestore, useFirestoreCollectionData } from "reactfire";
 import { collection } from "@firebase/firestore";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { useRoom } from "../context/roomContext";
 
 const Dropdown = ({ children }) => {
   const { currentRoom } = useRoom();
   return (
-    <DropdownMenu.Root className="dropdown">
-      <DropdownMenu.Trigger className="dropdown__trigger">
+    <DropdownMenu.Root className="room-dropdown">
+      <DropdownMenu.Trigger className="room-dropdown__trigger">
         {currentRoom}
-        <div className="dropdown__arrow" />
+        <div className="room-dropdown__arrow" />
       </DropdownMenu.Trigger>
-      <DropdownMenu.Content className="dropdown__content">
+      <DropdownMenu.Content className="room-dropdown__content">
         {children}
       </DropdownMenu.Content>
     </DropdownMenu.Root>
@@ -21,7 +19,6 @@ const Dropdown = ({ children }) => {
 };
 
 export const RoomDropdown = () => {
-  // const [rooms, setRooms] = useState([]);
   const { currentRoom, updateRoomState } = useRoom();
   const firestore = useFirestore();
 
@@ -30,24 +27,10 @@ export const RoomDropdown = () => {
     idField: "id",
   });
 
-  // useEffect(() => {
-  // const roomsRef = db.collection("rooms");
-
-  // const unsubscribe = roomsRef.onSnapshot((snap) => {
-  //   const data = snap.docs.map((doc) => ({
-  //     ...doc.data(),
-  //     id: doc.id,
-  //   }));
-  //   setRooms(data);
-  // });
-
-  //   return () => unsubscribe();
-  // }, []);
-
-  function getFirstLetter(string) {
-    const letters = string.split("");
-    return letters[0].toUpperCase();
-  }
+  // function getFirstLetter(string) {
+  //   const letters = string.split("");
+  //   return letters[0].toUpperCase();
+  // }
 
   return (
     <Dropdown>
@@ -56,7 +39,9 @@ export const RoomDropdown = () => {
           <DropdownMenu.Item
             key={room.id}
             className={
-              room.id === currentRoom ? "dropdown__item" : "dropdown__item"
+              room.id === currentRoom
+                ? "room-dropdown__item"
+                : "room-dropdown__item"
             }
             onSelect={() => updateRoomState(room.id)}
           >

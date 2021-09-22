@@ -1,11 +1,17 @@
 import { Logo } from "../components/Logo";
-import { RoomSelector } from "./RoomSelector";
+import { RoomDropdown } from "../components/RoomDropdown";
+import { OnlineList } from "../components/UserList";
 
-export const Sidebar = () => {
+export const Sidebar = ({ currentUser }) => {
   return (
     <div className="sidebar">
       <Logo />
-      <RoomSelector />
+      {currentUser ? (
+        <>
+          <RoomDropdown />
+          <OnlineList />
+        </>
+      ) : null}
     </div>
   );
 };
