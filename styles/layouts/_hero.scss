@@ -1,13 +1,13 @@
 @import "../helpers/colors";
 
 .hero {
-  height: 100vh;
+  height: 100%;
   display: grid;
-  overflow: hidden;
-  grid-template-columns: 5fr;
+  grid-template-columns: 140px 5fr;
   grid-template-rows: 5fr;
-  grid-auto-columns: 3fr;
-  grid-auto-rows: 3.5fr;
+  gap: 0;
+  grid-auto-columns: 6fr;
+  grid-auto-rows: 4fr;
   grid-auto-flow: column;
   @include media("<=tablet") {
     grid-auto-flow: row;
@@ -19,10 +19,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0 40px;
-  margin-top: 80px;
+  padding: 0 20px;
+  margin-left: -140px;
+  margin-bottom: -65px;
   @include media("<=tablet") {
     padding: 0 20px;
+    margin-bottom: -100px;
   }
 }
 
@@ -42,8 +44,8 @@
   border: none;
 
   border-radius: 999px;
-  margin: 40px 0 0;
-  padding: 20px 80px;
+  margin: 60px 0 0;
+  padding: 25px 120px;
   font-family: Gilroy, sans-serif;
   font-size: 20px;
   font-weight: 500;
@@ -55,18 +57,25 @@
   &:active {
     opacity: 1;
   }
+  @include media("<=desktop") {
+    font-size: 17px;
+    padding: 20px 80px;
+  }
   @include media("<=tablet") {
-    margin: 40px 0;
+    margin: 20px 0;
     padding: 20px 60px;
     font-size: 16px;
   }
   @include media("<=phone") {
-    padding: 15px 40px;
-    font-size: 14px;
+    padding: 15px 35px;
+    font-size: 13px;
   }
 }
 
 .hero__image {
   display: block;
   position: relative;
+  @include media("<=tablet") {
+    grid-column: 1 / 3;
+  }
 }

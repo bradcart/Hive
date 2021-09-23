@@ -9,7 +9,7 @@ const Dropdown = ({ children }) => {
     <DropdownMenu.Root className="room-dropdown">
       <DropdownMenu.Trigger className="room-dropdown__trigger">
         {currentRoom}
-        <div className="room-dropdown__arrow" />
+        <span className="room-dropdown__arrow" />
       </DropdownMenu.Trigger>
       <DropdownMenu.Content className="room-dropdown__content">
         {children}

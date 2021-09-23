@@ -22,13 +22,13 @@ export const UserList = () => {
   );
 
   return (
-    <div className="user-list">
+    <section className="user-list">
       {loading === "success" && onlineUsers.length > 0 ? (
         <>
-          <div className="user-list__header">
+          <span className="user-list__header">
             {onlineUsers.length}&nbsp;
             {onlineUsers.length > 1 ? " users online" : " user online"}
-          </div>
+          </span>
           {onlineUsers.map((user) => (
             <div key={user.id} className="user-list__item">
               <span className="user-list__item--avatar">
@@ -48,6 +48,6 @@ export const UserList = () => {
           ))}
         </>
       ) : null}
-    </div>
+    </section>
   );
 };

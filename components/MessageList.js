@@ -75,7 +75,7 @@ export const MessageList = ({ currentUser }) => {
   };
 
   return (
-    <div className="message-list--wrapper">
+    <main className="message-list--wrapper">
       {loadStatus === "success" && (
         <ul className="message-list">
           {messages.map((message, index) => (
@@ -141,6 +141,6 @@ export const MessageList = ({ currentUser }) => {
           photoURL={currentUser.photoURL}
         />
       ) : null}
-    </div>
+    </main>
   );
 };

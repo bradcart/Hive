@@ -1,12 +1,12 @@
 import { useUser, useSigninCheck } from "reactfire";
+import Div100vh from "react-div-100vh";
 import { Hero } from "../layouts/Hero";
 import { Chatroom } from "../layouts/Chatroom";
-import { Sidebar } from "../layouts/Sidebar";
 // import { useEffect } from "react";
 
 export default function Home() {
   const { data: currentUser } = useUser();
-  const { status, data: signInCheckResult } = useSigninCheck();
+  const { data: signInCheckResult } = useSigninCheck();
 
   // useEffect(() => {
   //   console.log("currentUser: " + currentUser);
@@ -16,10 +16,9 @@ export default function Home() {
 
   // TODO: Build Loading Screen component
   return (
-    <div style={{ height: "100vh", overflow: "hidden" }}>
-      <Sidebar currentUser={currentUser} />
+    <Div100vh style={{ overflow: "hidden", overscrollBehaviorY: "none" }}>
       {
-        signInCheckResult && signInCheckResult.signedIn === true ? (
+        signInCheckResult && signInCheckResult.signedIn ? (
           <Chatroom currentUser={currentUser} />
         ) : signInCheckResult && signInCheckResult.signedIn === false ? (
           <Hero />
@@ -35,6 +34,6 @@ export default function Home() {
         //   <h2>Loading...</h2>
         // </div>
       }
-    </div>
+    </Div100vh>
   );
 }

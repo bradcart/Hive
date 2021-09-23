@@ -4,7 +4,7 @@ import { UserList } from "../components/UserList";
 
 export const Sidebar = ({ currentUser }) => {
   return (
-    <div className="sidebar">
+    <nav className="sidebar">
       <Logo />
       {currentUser ? (
         <>
@@ -12,6 +12,6 @@ export const Sidebar = ({ currentUser }) => {
           <UserList />
         </>
       ) : null}
-    </div>
+    </nav>
   );
 };

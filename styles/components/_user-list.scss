@@ -8,24 +8,13 @@
 
 .user-list__header {
   width: 100%;
-  margin-top: 15px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin: 15px 0 10px;
+  text-align: center;
   font-family: forma-djr-deck, sans-serif;
   font-weight: 500;
   font-style: normal;
   color: $green;
 }
-
-// .green-dot {
-//   width: 7px;
-//   height: 7px;
-//   border-radius: 999px;
-//   margin-right: 10px;
-//   background-color: $green;
-// }
 
 .user-list__item {
   display: flex;
@@ -40,7 +29,7 @@
   position: relative;
   width: 40px;
   height: 40px;
-  margin-right: 10px;
+  margin-right: 5px;
   > div {
     position: unset !important;
   }
@@ -75,3 +64,11 @@
     display: none;
   }
 }
+
+// .green-dot {
+//   width: 7px;
+//   height: 7px;
+//   border-radius: 999px;
+//   margin-right: 10px;
+//   background-color: $green;
+// }

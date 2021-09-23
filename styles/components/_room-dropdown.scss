@@ -6,11 +6,10 @@
   padding: 0;
   margin: 0;
 
-  width: 105px;
+  width: 60%;
   padding-top: 10px;
   padding-bottom: 5px;
   margin-top: 10px;
-  // margin-bottom: 20px;
   display: flex;
   justify-content: space-around;
   align-items: baseline;
@@ -23,7 +22,8 @@
   border-bottom: 1px solid;
 
   @include media("<=phone") {
-    width: 80px;
+    width: 75%;
+    font-size: 14px;
   }
 }
 
