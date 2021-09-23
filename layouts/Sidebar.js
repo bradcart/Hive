@@ -1,6 +1,6 @@
 import { Logo } from "../components/Logo";
 import { RoomDropdown } from "../components/RoomDropdown";
-import { OnlineList } from "../components/UserList";
+import { UserList } from "../components/UserList";
 
 export const Sidebar = ({ currentUser }) => {
   return (
@@ -9,7 +9,7 @@ export const Sidebar = ({ currentUser }) => {
       {currentUser ? (
         <>
           <RoomDropdown />
-          <OnlineList />
+          <UserList />
         </>
       ) : null}
     </div>

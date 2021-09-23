@@ -1,8 +1,8 @@
 .logo {
   display: flex;
-  // justify-content: center;
+  justify-content: center;
   align-items: center;
-  margin: 30px;
+  margin: 30px 0;
 }
 
 .logo__text {
@@ -10,6 +10,9 @@
   font-weight: 900;
   font-style: normal;
   font-size: 30px;
-  padding: 0px 5px;
+  padding: 0 5px;
   margin-top: 5px;
+  @include media("<=phone") {
+    display: none;
+  }
 }

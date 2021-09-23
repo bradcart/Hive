@@ -1,9 +1,9 @@
-// import Image from "next/image";
-import { useRoom } from "../context/roomContext";
+import Image from "next/image";
 import { useFirestore, useFirestoreCollectionData } from "reactfire";
 import { collection, query, where } from "@firebase/firestore";
+import { useRoom } from "../context/roomContext";
 
-export const OnlineList = () => {
+export const UserList = () => {
   const { currentRoom } = useRoom();
 
   const firestore = useFirestore();
@@ -23,7 +23,7 @@ export const OnlineList = () => {
 
   return (
     <div className="user-list">
-      {loading === "success" ? (
+      {loading === "success" && onlineUsers.length > 0 ? (
         <>
           <div className="user-list__header">
             {onlineUsers.length}&nbsp;
@@ -31,18 +31,19 @@ export const OnlineList = () => {
           </div>
           {onlineUsers.map((user) => (
             <div key={user.id} className="user-list__item">
-              {/* <span className="user-list__avatar">
-                  <Image
-                    className="avatar"
-                    src={user.photoURL}
-                    alt={`${user.displayName}`}
-                    width={40}
-                    height={40}
-                    layout="fixed"
-                  />
-                </span> */}
-              <div className="green-dot" />
-              {user.displayName}
+              <span className="user-list__item--avatar">
+                <Image
+                  className="avatar"
+                  src={user.photoURL}
+                  alt={`${user.displayName}`}
+                  layout="fixed"
+                  width={56}
+                  height={56}
+                  quality={100}
+                />
+              </span>
+              {/* <div className="green-dot" /> */}
+              <span className="user-list__item--name">{user.displayName}</span>
             </div>
           ))}
         </>

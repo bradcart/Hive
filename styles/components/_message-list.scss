@@ -13,13 +13,17 @@
   align-self: center;
   width: 100%;
   height: 100%;
+  padding: 0 120px;
   overflow-y: auto;
   overflow-x: hidden;
+  @include media("<=tablet") {
+    padding: 0 40px;
+  }
 }
 
 .message-list {
   width: 100%;
-  padding: 45px 10%;
+  padding: 45px 0;
 }
 
 .message-list__item {
@@ -37,21 +41,48 @@
 }
 
 .content {
+  position: relative;
   display: flex;
   align-items: center;
   &--sent {
     @extend .content;
     flex-direction: row-reverse;
+    .content__text--name {
+      text-align: right;
+    }
   }
 }
 
 .content__avatar {
-  // width: 120px;
+  position: relative;
+  width: 100px;
+  height: 100px;
   margin: 0 15px;
-}
-
-.content__avatar--img {
+  align-self: flex-start;
+  flex-shrink: 0;
+  // flex-grow: 1;
   border-radius: 100%;
+  overflow: hidden;
+  > div {
+    position: unset !important;
+  }
+  // .image {
+  //   object-fit: contain;
+  //   width: 100% !important;
+  //   position: relative !important;
+  //   height: unset !important;
+  // }
+  @include media("<=tablet") {
+    // position: relative;
+    width: 80px;
+    height: 80px;
+  }
+  @include media("<=phone") {
+    // position: relative;
+    margin: 0 5px;
+    width: 64px;
+    height: 64px;
+  }
 }
 
 .content__text {
@@ -76,4 +107,9 @@
 .content__text--message {
   grid-column: 2;
   grid-row: 2;
+  max-width: 700px;
+  @include media("<=desktop") {
+    max-width: 600px;
+  }
+  // white-space: pre-line;
 }

@@ -42,6 +42,7 @@ export const useOnlinePresence = () => {
   const databaseOffline = {
     state: "offline",
     displayName: currentUser.displayName,
+    photoURL: currentUser.photoURL,
     inRoom: currentRoom,
     isTyping: false,
     last_changed: serverTimestamp(),
@@ -49,6 +50,7 @@ export const useOnlinePresence = () => {
   const databaseOnline = {
     state: "online",
     displayName: currentUser.displayName,
+    photoURL: currentUser.photoURL,
     inRoom: currentRoom,
     isTyping: isTyping,
     last_changed: serverTimestamp(),
@@ -56,6 +58,7 @@ export const useOnlinePresence = () => {
   const firestoreOffline = {
     state: "offline",
     displayName: currentUser.displayName,
+    photoURL: currentUser.photoURL,
     inRoom: currentRoom,
     isTyping: false,
     last_changed: firestoreTimestamp(),
@@ -63,6 +66,7 @@ export const useOnlinePresence = () => {
   const firestoreOnline = {
     state: "online",
     displayName: currentUser.displayName,
+    photoURL: currentUser.photoURL,
     inRoom: currentRoom,
     isTyping: isTyping,
     last_changed: firestoreTimestamp(),

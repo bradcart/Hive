@@ -20,14 +20,14 @@ export const Hero = () => {
   return (
     <div className="hero">
       <div className="hero__content">
-        <div>
+        <div className="hero__content--text">
           <h1>What&apos;s the buzz?</h1>
           <h2>Some kind of tagline or something should go here ya know.</h2>
         </div>
         <button
-          className="hero__button"
+          className="hero__content--button"
           onClick={() => signInWithGoogle()}
-          style={{ margin: "40px auto 0 auto" }}
+          // style={{ margin: "40px auto 0 auto" }}
         >
           Sign In With Google
         </button>

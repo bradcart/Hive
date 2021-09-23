@@ -8,39 +8,42 @@
 
 .user-list__header {
   width: 100%;
-  margin-top: 25px;
+  margin-top: 15px;
   margin-bottom: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: forma-djr-deck, sans-serif;
-  font-size: 16px;
   font-weight: 500;
   font-style: normal;
   color: $green;
 }
 
-.green-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 999px;
-  margin-right: 10px;
-  background-color: $green;
-}
+// .green-dot {
+//   width: 7px;
+//   height: 7px;
+//   border-radius: 999px;
+//   margin-right: 10px;
+//   background-color: $green;
+// }
 
 .user-list__item {
   display: flex;
   align-items: center;
   margin: 10px 0;
-  font-family: forma-djr-deck, sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  font-style: normal;
+  @include media("<=phone") {
+    justify-content: center;
+  }
 }
 
-.user-list__avatar {
-  margin-right: 10px;
+.user-list__item--avatar {
   position: relative;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  > div {
+    position: unset !important;
+  }
   &::after {
     content: "";
     position: absolute;
@@ -48,8 +51,27 @@
     right: -4px;
     width: 9px;
     height: 9px;
-    border: 2px solid #20221b;
+    border: 2px solid #fff;
     border-radius: 999px;
     background-color: $green;
+  }
+  @include media("<=phone") {
+    width: 56px;
+    height: 56px;
+    margin-right: 0;
+    &::after {
+      right: -2px;
+      bottom: 4px;
+    }
+  }
+}
+
+.user-list__item--name {
+  font-family: forma-djr-deck, sans-serif;
+  font-size: inherit;
+  font-weight: 500;
+  font-style: normal;
+  @include media("<=phone") {
+    display: none;
   }
 }

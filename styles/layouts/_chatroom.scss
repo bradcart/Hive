@@ -1,5 +1,3 @@
-@import "../helpers/colors";
-
 .chatroom {
   width: 100%;
   height: 100vh;
@@ -12,8 +10,17 @@
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-columns: 170px 1fr;
+  grid-template-columns: 180px 1fr;
   grid-template-rows: 100%;
   // column-gap: min(2.5%, 30px);
   justify-content: center;
+  @include media("<=desktop") {
+    grid-template-columns: 160px 1fr;
+  }
+  @include media("<=tablet") {
+    grid-template-columns: 140px 1fr;
+  }
+  @include media("<=phone") {
+    grid-template-columns: 100px 1fr;
+  }
 }

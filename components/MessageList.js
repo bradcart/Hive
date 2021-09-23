@@ -76,9 +76,9 @@ export const MessageList = ({ currentUser }) => {
 
   return (
     <div className="message-list--wrapper">
-      <ul className="message-list">
-        {loadStatus === "success" &&
-          messages.map((message, index) => (
+      {loadStatus === "success" && (
+        <ul className="message-list">
+          {messages.map((message, index) => (
             <li
               className={
                 sentByUser(message.uid)
@@ -99,16 +99,22 @@ export const MessageList = ({ currentUser }) => {
                     sentByUser(message.uid) ? "content--sent" : "content"
                   }
                 >
-                  <div className="content__avatar">
+                  <div
+                    className="content__avatar"
+                    style={{ position: "relative" }}
+                  >
                     {message.photoURL ? (
                       <Image
-                        className="content__avatar--img"
                         src={replacePhotoUrl(message.photoURL)}
                         alt={`${message.displayName}'s avatar`}
+                        layout="fixed"
                         width={100}
                         height={100}
-                        quality={95}
-                        layout="fixed"
+                        quality={96}
+                        className="image"
+                        // sizes="(max-width: 478px) 80px, 100px"
+                        // objectFit="cover"
+                        // objectPosition="center"
                       />
                     ) : null}
                   </div>
@@ -123,7 +129,8 @@ export const MessageList = ({ currentUser }) => {
               </motion.div>
             </li>
           ))}
-      </ul>
+        </ul>
+      )}
 
       {loadStatus === "success" && messages.length > 0 ? (
         <MessageInput
